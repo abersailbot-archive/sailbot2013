@@ -1,0 +1,27 @@
+Tracksail-AI:
+
+More realistic physics, include actuator lag, slow down turn speeds, make boat veer into the wind. Add in random course variations to simulate waves.
+
+Allow multiple players
+
+
+
+Old tracksail to do:
+
+1.0.0 TODO:
+
+- Change comments into english in
+  * Server.java
+  * ServerInterface.java
+  * StartupDialog.java
+  * TrackListModel.java
+  * Tracksail.java
+  * Track.java
+  * Vector2.java
+- Do testing to find any gruesome bugs to fix before releasing a final version
+
+1.2.0 TODO:
+
+- AI
+- Better physics
+- UI improvements

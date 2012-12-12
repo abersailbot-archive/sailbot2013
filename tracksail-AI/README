@@ -1,0 +1,65 @@
+--------------------------Tracksail-AI Readme----------------------------------
+Tracksail-AI is a modified version of the sailing game tracksail (http://tracksail.sourceforge.net) which is intended to be played by AI players instead of humans.
+It's primarly intended to test AI strategies for autonomous sailing robots.
+It makes some relatively minor modifications to tracksail to allow tracksail to be controlled by sending commands to a TCP socket listening on port 5555.
+
+The following commands are available:
+
+
+    set waypoint - jumps to the next waypoint
+
+    set rudder x - sets rudder to position x (270 to 90 centreing on 0)
+
+    set sail x - sets the sail to position x (270 to 90 centreing on 0),
+    the sail may not actually move to your desired position if that position is on the opposite tack or lets the sail out too far when close hauled.
+
+    set unwind - this causes tracksail to exit. The unwind command is a throwback to an early sailing robot which had a continous rotation mast and tended to wrap a cable around it.
+
+    get wind_dir - gets the wind direction relative to the boat.
+
+    get compass - gets the current heading of the boat.
+
+    get waypointdir - gets the dirction to the next waypoint (known as ports in tracksail). This will be halfway between the two buoys. It is recommended that both the 
+    port and starboard buoy be set to the same position, however they can't be identical and must differ by at least one. See tracks/AI.track for an example.
+
+    get waypointnum - gets the number of the next waypoint.
+
+    get waypointdist - gets the distance to the next waypoint (in metres?).
+
+    get sail - gets the sail position
+
+    get northing - gets the Y coordinate of the boat's position, equivalent to a GPS northing or latitude
+
+    get easting - gets the X coordinate of the boat's position, equivalent to a GPS easting or longitude
+
+    An example client program written in C using a simple control strategy is available in the example_client directory.
+
+Starting tracksail-AI:
+
+    Tracksail needs to be started in two parts the server and the client. The shell scripts server.sh and client.sh will start the two parts.
+    Alternatively the script start_tracksail.sh runs both, it also kills any existing processes and any existing rmiregistry processes. Be carfeul as
+    this may affect over RMI based Java applications which might be running. The whole program takes about 20 or 30 seconds to start. Do not attempt to
+    run a simulator client until everything has started up.
+
+    These scripts have been tested under both SunOS 5.10 and Ubuntu Linux 8.04 (Hardy LTS). Theoretically they should work on OSX and other Linux distributions
+    but this hasn't been tested yet. With a small amount of work they should work on Windows but this has not been tested either.
+
+    Tracksail-AI has only been tested under the Sun Java VM versions 1.5 and 1.6.
+
+Limitations of tracksail-AI as a sailing robot simulator.
+
+    Lag times are far too low. In a real robot actuators can take several seconds to move the rudder or sail into a new position, in tracksail they move instantly.
+    It also doesn't suffer from problems with actuator repeatability or accuracy.
+    The physics engine doesn't simulate waves and the way wind varies is not very realistic.
+    
+    Often algorithms which work in tracksail don't work in the real world. However algorithms which fail in tracksail generally fail in the real world too
+    so it can be a good way to eliminate things which will never work. 
+    
+Changes from original Tracksail:
+
+    Changed the startup screen so the whole game starts automatically. This breaks being able to add multiple players and always loads the track default.track.
+    Changed the way the rudder behaves so that the rudder stays in the position that you leave it in.
+    A waypoint is now considered to have been reached when the boat gets within 15m of it. 
+    Changed the background tile to be plain blue, this was to reduce bandwidth when running the client over VNC.
+    
+    

@@ -1,0 +1,63 @@
+Sailing Robot Route Planner 
+
+by Colin Sauze (C) Copyright 2006-2012
+
+This program was written to plan routes for use in sailing robots. It displays a map on screen and when you click anywhere on that map it displays the latitude and longitude of that point. You can then save a set of points into a file which the robot can use as its waypoints. 
+
+The program can also display telemetry from the robot including its current position, the position of the waypoint its aiming for, its heading, speed and rudder/sail positions as well as the wind direction. The current position of the user can also be shown by taking data from a local GPS receiver communicating via the GPSd program. 
+
+This program is by no means complete or fully working, it contains a number of bugs and several hacks which aren't very good software engineering practice. However it should be flexible enough that it can be used for applications other than sailing robots. 
+
+Compiling:
+
+To complile the program you will need Apache Ant and Java 1.6 or later (1.5 might work but is untested). To compile simply run ant in the route_planner directory and everything should compile, there maybe a warning a the use of a deprecated API. 
+
+Running:
+
+The compilation process builds everything into a JAR file. To run just type:
+
+    java -jar RoutePlanner.jar
+
+By default an Openstreetmap map of Aberystwyth is shown, to use your own map type:
+
+    java -jar RoutePlanner.jar mapname
+
+where mapname is the name of an image file (png,gif or jpg file) that contains the map you wish to use. This should have a corresponding desc file with the name mapname.desc. See the section on obtaining maps for more details. 
+
+
+The Telemetry System
+
+The telemetry system broadcasts data about the boat's current state in a single broadcast UDP packet every second. By sending just a single packet high rates of packet loss (80-90%) can be tolerated with a reasonable amount of data still getting through. The packet contains the boat's current latitude, longitude, heading, rudder position, sail position, desired heading, if the desired heading is directly sailable, the waypoint number, distance to waypoint the latitude and longitude of the waypoint, the boat speed in knots, the wind direction (both relative to the boat and the true wind direction), the amount of simulated battery remaining and the cross track error (the distance of the boat from the line between the last waypoint and current waypoint). All values are sent as ASCII text in key/value pairs. 
+
+Making Maps
+
+Each map must include a .desc file which describes the map. This should be the same name as the map with the extra extension .desc on the end. For example a map in map.png will use a desc file called map.png.desc. This file describes if the map uses Ordnance Survey Grid coordinates (which use the OSGB36 map datum) or WGS84 decimal latitude/longitude (as used in most maps including OpenStreetMap, Google Maps and Google Earth) coordinates and specifies the map location and pixel location of two points on that map. The second point must be below and to the right of the first in pixel space. The first line of the file should say “OS” if the map uses ordnance survey coordinates or “notOS” if the map uses WGS84 coordinates. The second line specifies the first set of coordinates in the format 
+
+x,y = lon,lat
+
+or 
+
+x,y = easting,northing
+
+where x and y are a pixel position and lon,lat are a WGS84 longitude and latitude and easting,northing are an ordnance survey easting and northing. The easting and northing are distances in metres from the grid origin point, typically paper OS explorer/landranger maps show 2 digit numbers down each side, these are in kilometres. In each corner of the map the full coordinates (typically 6 digits each) are shown. The route planner does not support letter/6 digit grid references of the format AB123456. DO NOT USE latitude/longitude values written on ordnance survey maps as these are in the OSGB36 map datum and this software assumes all latitude/longitude values are in WGS84. Example OS file format. 
+
+OS 
+0,200 = 257000,283000 
+400,600 = 259000,281000
+
+Typical non OS file. 
+
+notOS 
+88,147 = -4.1328,52.4303 
+1915,1844 = -4.0711,52.3953 
+
+Maps can be obtained from a variety of sources. Open Street Map has free open source maps of the whole world, these can 
+can be downloaded from their website (www.openstreetmap.org) by going to the export option, this allows custom coordinates and scales to be selected.
+
+Satellite photos can be obtained from Google Earth, turn on the grid (and set the coordinates to decimal degrees), turn off terrain and take a screen shot. Then use the grid and a photo editor to work out the pixel and latitude/longitude coordinates of two points. Experience has shown that Google Earth pictures are easier to view outdoors if you invert the colours, as they tend to be very dark pictures which are difficult to see on a laptop screen in sunlight. 
+
+For UK users Ordnance Survey has recently opened up their data and some free maps can now be downloaded from their website. Alternatively npemap.org.uk has scans of 1950s maps. 
+
+Known Bugs
+
+Please see online bug tracker on the Microtranat sourceforge page.

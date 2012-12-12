@@ -1,0 +1,108 @@
+<project name="Tracksail" default="ts" basedir=".">
+  <!-- Variables: source code, binary and documentation directories -->
+  <property name="srcDir" value="src"/>
+  <property name="classDir" value="bin"/>
+  <property name="apiDir" value="doc/api"/>
+  
+  <!-- Initialization -->
+  <target name="init">
+    <!-- Create timestamp -->
+    <tstamp/>
+    <!-- Create binary directory -->
+    <mkdir dir="${classDir}"/>
+  </target>
+
+  <!-- "ant clean" removes installed binaries and javadocs -->
+  <target name="clean" depends="init">
+    <!-- Remove ant-created directories and files -->
+    <delete dir="${classDir}"/>
+    <delete dir="${apiDir}"/>
+    <delete file="${basedir}/Tracksail-dev.tar.bz2"/>
+    <delete file="${basedir}/Tracksail-src.tar.bz2"/>
+    <delete file="${basedir}/Tracksail-release.zip"/>
+  </target>
+
+  <!-- "ant api" creates javadocs -->
+  <target name="api" depends="init">
+    <mkdir dir="${apiDir}"/>
+    <javadoc destdir="${apiDir}"
+	     access="private"
+	     author="true"
+	     version="true">
+      <fileset dir="${srcDir}">
+        <include name="*.java"/>
+      </fileset>
+    </javadoc>
+  </target>
+
+  <!-- This was set as 'default' so just "ant" does this -->
+  <!-- "ant ts" compiles and installs the server and the client -->
+  <target name="ts" depends="init">
+    <!-- Compile files to the binary directory -->
+    <javac srcdir="${srcDir}" destdir="${classDir}"/>
+    <!-- RMI -->
+    <rmic base="${classDir}" classname="Server"/>
+    <rmic base="${classDir}" classname="Tracksail"/>
+  </target>
+
+  <!-- "ant all" compiles and installs everything and creates javadocs -->
+  <target name="all" depends="ts,api">
+  </target>
+
+  <!-- "ant dev" creates a .tar.bz2 developer source package without images but 
+       with university documentation -->
+  <target name="dev">
+    <tar destfile="${basedir}/Tracksail-dev.tar.bz2" compression="bzip2">
+      <tarfileset dir="${basedir}" preserveLeadingSlashes="true">
+        <include name="build.xml"/>
+	<include name="ChangeLog"/>
+	<include name="TODO"/>
+	<include name="policy"/>
+	<include name="policy_all"/>
+	<include name="doc/dokumentti.sxw"/>
+	<include name="src/"/>
+	<include name="tracks/"/>
+	<include name="web/"/>
+      </tarfileset>
+    </tar>
+  </target>
+  
+  <!-- "ant src" creates a .tar.bz2 source distribution package -->
+  <target name="src">
+    <tar destfile="${basedir}/Tracksail-src.tar.bz2" compression="bzip2">
+      <tarfileset dir="${basedir}"
+                  prefix="./Tracksail"
+		  preserveLeadingSlashes="true"
+		  mode="755">
+	<include name="server.sh"/>
+	<include name="client.sh"/>
+      </tarfileset>
+      <tarfileset dir="${basedir}"
+                  prefix="./Tracksail"
+		  preserveLeadingSlashes="true">
+	<include name="build.xml"/>
+	<include name="ChangeLog"/>
+	<include name="TODO"/>
+	<include name="policy"/>
+	<include name="policy_all"/>
+	<include name="src/"/>
+	<include name="tracks/"/>
+	<include name="web/"/>
+	<include name="images/"/>
+      </tarfileset>
+    </tar>
+  </target>
+
+  <!-- "ant rel" creates a binary release as a zip file -->
+  <target name="rel" depends="ts">
+    <zip destfile="${basedir}/Tracksail-release.zip">
+      <zipfileset dir="${basedir}"
+                  prefix="./"
+		  filemode="755"
+		  includes="server.sh client.sh"/>
+      <zipfileset dir="${basedir}"
+                  prefix="./"
+		  includes="${classDir}/ policy policy_all images/ tracks/ bin/"/>
+    </zip>
+  </target>
+</project>

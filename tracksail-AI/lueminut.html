@@ -1,0 +1,186 @@
+<html>
+<head>
+<title>LueMinut Tracksailin versiolle 1.0-rc1 (CVS)</title>
+</head>
+<body background = "./images/bg.jpeg">
+<h3 id = "contents">Sis‰llys</h3>
+<p><a href = "#playing">1. Pelaaminen</a>
+<p><a href = "#server">2. Oman Tracksail-palvelimen yll‰pit‰minen</a>
+<p><a href = "#tracks">3. Uusien ratojen luominen</a>
+<hr/>
+<h3 id = "playing">1. Pelaaminen</h3>
+<p>Tracksailin ideana on ohjata purjevenett‰ kilparadan l‰pi. Jokaista rataa kierret‰‰n tietty 
+kierrosm‰‰r‰ maaliin p‰‰semiseksi. Rata koostuu porteista, joista jokaista esitt‰‰ kaksi poijua - punainen ja 
+vihre‰. Porttia l‰p‰istess‰ tulee punaisen poijun j‰‰d‰ veneen vasemmalle puolelle ja vihre‰n oikealle.</p>
+<h4>1.1 Asiakassovelluksen asentaminen</h4>
+<p>Tracksail toimitetaan zip-pakettina, joka sis‰lt‰‰ tarvittavat luokka- ja kuvatiedostot sek‰ 
+asiakassovelluksen ett‰ palvelimen k‰ytt‰miseen. Paketin tuorein versio lˆytyy   
+<a href = "https://sourceforge.net/project/showfiles.php?group_id=94859">t‰‰lt‰</a>.</p>
+<p>Asentaaksesi tiedostot, luo hakemisto jonne haluat pelin asentaa ja pura zip-paketti kyseiseen hakemistoon.</p>
+<h4>1.2 Asiakassovelluksen k‰ynnist‰minen</h4>
+<p>K‰ynnist‰‰ksesi asiakassovelluksen, avaa komentotulkki ja mene <font face = "courier">bin</font>-hakemistoon, 
+joka ilmestyi paketin avaamisen yhteydess‰. Suorita komento <font face =
+"courier">java Tracksail</font>. 
+Sinun pit‰isi n‰hd‰ yhteysdialogi, jollainen on esitetty <i>kuvassa 1.1</i>. T‰ss‰ voit asettaa nimesi ja antaa 
+sen palvelimen IP-osoitteen, jossa haluat pelata.</p>
+<center>
+<img src = "./images/shot1.png"/>
+<br/>Kuva 1.1: Yhteysdialogi
+</center>
+<p>Tracksailin palvelin ei tunnista sinua nimesi perusteella, se antaa sinulle sis‰isen yksilˆllisen 
+tunnusnumeron. T‰m‰n seurauksena voit jakaa nimen kuinka monen muun pelaajan kanssa tahansa samalla palvelimella.</p>
+<p>Jos olet valmis jatkamaan, klikkaa "Start"-painiketta. Voit poistua klikkaamalla "Cancel", jos totesit n‰inkin 
+pitk‰lle tulemisen olleen virhe.</p>
+<br/>
+<h4>1.3 Aula</h4>
+<p>Kun olet saanut yhteyden Tracksail-palvelimeen, p‰‰dyt aulaan, jollainen on n‰ytetty <i>kuvassa 1.2</i>. 
+T‰‰ll‰ voit keskustella muiden pelaajien kanssa ennen varsinaiseen kisaan liittymist‰ - ja tietysti setvi‰ kisaa 
+j‰lkeenp‰in :)</p>
+<br/>
+<center>
+<img src = "./images/shot2.png"/>
+<br/>Kuva 1.2: Aula
+</center>
+<p>T‰m‰n ikkunan yl‰osassa n‰et nimesi. Nimikent‰n vieress‰ on "Exit"-painike. Siin‰ on juurikin se nappi, 
+jota haluat painaa pomosi ilmestyess‰ n‰kyviin ja halutessasi yht'‰kki‰ poistua pelist‰  ;)</p>
+<p>Pelaajien (ja palvelimen) l‰hett‰m‰t viestit n‰kyv‰t isossa tekstilaatikossa. Vierityspalkkien avulla 
+voit n‰hd‰ tekstit, jotka menev‰t rajojen yli, sek‰ katsoa mit‰ aiemmin on sanottu.</p>
+<p>Alhaalla on pienempi tekstikentt‰, jonne voit kirjoittaa omat viestisi. "Say"-painikkeen klikkaaminen 
+l‰hett‰‰ jorinasi maailmalle muiden n‰ht‰v‰ksi.</p>
+<p>Oikealta lˆytyy "Join Game"-painike. T‰m‰n alapuolella on lista luoduista kisoista, joihin voit 
+osallistua. Liitty‰ksesi kisaan, valitse sen nimi listasta ja klikkaa "Join Game"-painiketta.</p>
+<p>Tracksailiss‰ jokainen pelaaja voi luoda kisan klikkaamalla "Create Game"-painiketta. Luodaksesi 
+kisan, kirjoita sille enemm‰n tai v‰hemm‰n kuvaava nimi painikkeen yl‰puolella olevaan tekstikentt‰‰n ja 
+klikkaa "Create Game". T‰m‰ luo uuden kisan, jonka muut n‰kev‰t kisalistassa. Pelaaja, joka on luonut kisan, 
+on kyseisen kisan "omistaja". Edemp‰n‰ lis‰tietoa tuosta aiheesta.</p>
+<br/>
+<h4>1.4 Kisaaminen</h4>
+<p>Kun olet liittynyt kisaan, eteesi avautuu kisaikkuna, jollainen n‰kyy <i>kuvassa 1.3</i>. Yl‰- ja alaosa 
+n‰ytt‰v‰t samalta ja toimivat samoin kuin aulassa. Viestit n‰ytet‰‰n nyt pelin‰kym‰n vasemmassa alareunassa - 
+se on se ruutu, jossa n‰kyv‰t veneet, meri ja muuta sellaista. Pelin‰kym‰ss‰ n‰et monta muutakin t‰rke‰‰ 
+asiaa.</p>
+<br/>
+<center>
+<img src = "./images/shot3.png"/>
+<br/>Kuva 1.3: Kisa
+</center>
+<p>Vasemmassa yl‰kulmassa on tuulimittari. Pussi n‰ytt‰‰ tuulen suunnan ja numero sen yl‰puolella tuulen 
+voimakkuuden metrein‰ sekunnissa.</p>
+<p>N‰ist‰ oikealle ovat kisan tila, suorittamiesi kierrosten m‰‰r‰ ja radan suoritettavien kierrosten m‰‰r‰. 
+Pelin tila on joko "Racing" tai "Waiting Game Master to Start Game". Tilan ollessa "Racing", veneesi liikkuu 
+ja voit ohjata sit‰. Kun tila on "Waiting ...", pelin omistaja kaiketikin odottaa lis‰‰ pelaajia kisaan 
+ennen aloittamista, valitsee rataa tai haluaa vain viivytt‰‰ aloittamista viel‰ hetken.</p>
+<p>Katsoessasi veneit‰ n‰et kunkin yl‰puolella sen omistajan nimen. Omasta veneest‰si l‰htee myˆs vihre‰ 
+nuoli, joka osoittaa seuraavan portin suunnan ja n‰ytt‰‰ et‰isyyden siihen metrein‰.</p>
+<p>Veneesi ohjaamiseen voit k‰ytt‰‰ painikkeita ja liukuvalitsinta pelin‰kym‰n alapuolella. Painikkeet 
+k‰‰nt‰v‰t venett‰si paapuuriin tai styyrpuuriin nuolien mukaisesti. Purjehdussanastoa tuntemattomille: 
+paapuuri on aluksen vasen puoli per‰st‰ keulaan katsottuna, styyrpuuri oikea.</p>
+<p>Liukuvalitsin kontrolloi purjettasi. Mit‰ enemm‰n se on vasemmalla, sen tiukemmin purje on lukittuna kohti 
+veneesi per‰‰. Kun valitsin on ‰‰rioikealla, purjeesi on t‰ysin vapaana avautumaan. Purje ei liiku osoittamaan 
+pidemm‰lle eteen kuin 90 asteen kulmaan veneesi runkoon n‰hden.</p>
+<p>N‰et myˆs pudotusvalikon ja painikkeen pelin‰kym‰n yl‰puolella. N‰m‰ eiv‰t ole k‰ytett‰viss‰ ellet ole 
+kisan omistaja. Pudotusvalikosta kisan omistaja voi valita radan palvelimella saatavilla olevista ennen kisan 
+aloittamista. Kun pelin omistajan mielset‰ kisa on valmis alkamaan, h‰n aloittaa sen klikkaamalla 
+"Start Game"-painiketta.</p>
+<br/><a href ="#contents">Sis‰llys</a>
+<hr/>
+<h3 id = "server">2. Oman Tracksail-palvelimen yll‰pit‰minen</h3>
+<h4>2.1 Palvelimen asentaminen</h4>
+<p>Tracksail toimitetaan zip-pakettina, joka sis‰lt‰‰ tarvittavat luokka- ja kuvatiedostot sek‰ 
+asiakassovelluksen ett‰ palvelimen k‰ytt‰miseen. Paketin tuorein versio lˆytyy 
+<a href="https://sourceforge.net/project/showfiles.php?group_id=94859">t‰‰lt‰</a>. Paketti sis‰lt‰‰ myˆs muutamia ratoja.</p>
+<p>Asentaaksesi tiedostot, luo hakemisto jonne haluat pelin asentaa ja pura zip-paketti kyseiseen hakemistoon.<p>
+<h4>2.2 Palvelimen k‰ynnist‰minen</h4>
+<p> K‰ynnist‰‰ksesi palvelimen, avaa komentotulkki ja mene hakemistoon johon purit tiedostot. Sielt‰ pit‰isi 
+lˆyty‰ <font face = "courier">bin</font>-hakemisto, joka sis‰lt‰‰ bin‰‰ritiedostot. Siirry tuohon hakemistoon.</p>
+<p>Jotta voisit k‰ytt‰‰ palvelinta, sinun t‰ytyy ensin k‰ynnist‰‰ rmi-palvelu, jonka Java tarjoaa. Jos sinulla 
+ei ole sit‰ jo k‰ynniss‰, aloita se komennolla <font face = "courier">rmiregistry &amp;</font> (Linux/Unix) tai 
+<font face = "courier">start rmiregistry</font> (Windows).</p>
+<p>Kun rmi on k‰ynniss‰, voit k‰ynnist‰‰ palvelimen komennolla: <font face = "courier">
+java -Djava.security.policy=../policy Server</font>. Turvallisuudestaan huolehtivat yksilˆt halunnevat 
+tietenkin tutustua p‰‰hakemiston <font face = "courier">policy</font>-tiedostoon ensin.</p>
+<p>Testauksessa ilmeni ongelmia Windows-ymp‰ristˆss‰ <font face = "courier">policy</font>-tiedoston kanssa 
+(esim. ei oikeuksien vuoksi voi lukea ratatiedostoa). Jos kohtaat vastaavia ongelmia, mukana on myˆs 
+<font face = "courier">policy_all</font>-tiedosto, joka poistaa kaikki turvallisuusrajoitukset. Palvelin 
+k‰ynnistet‰‰n vastaavasti <font face = "courier"> java -Djava.security.policy=../policy_all Server</font> 
+komennolla. T‰m‰n k‰yttˆ ei kuitenkaan ole suositeltavaa.</p>
+<p>Kun palvelin on k‰ynnistetty, se alkaa ottaa vastaan asiakasyhteyksi‰. Sinun t‰ytyy vain kertoa asiakkaille 
+mihin ottaa yhteytt‰. Oman Tracksail-palvelimen k‰ynnist‰minen ei ole j‰rin vaikeaa, eih‰n? :)</p>
+<h4>2.3 Palvelinkomennot</h4>
+<p>T‰rkein komento uudelle k‰ytt‰j‰lle on todenn‰kˆisesti "help", joka antaa sinulle listan sallituista 
+komennoista ja lyhyen selityksen jokaisesta. T‰ss‰ annamme vain hieman pidemm‰n selityksen kustakin.</p>
+<p>Komento "exit" lopettaa kaikki k‰ynniss‰ olevat kisat, sulkee kaikki asiakasyhteydet ja sulkee palvelimen.</p>
+<p>Komento "players" listaa kaikki parhaillaan yhteydess‰ olevat pelaajat. Se n‰ytt‰‰ taulukon, jossa on heid‰n 
+yksilˆllinen tunnistusnumeronsa ja nimens‰. Saatat tarvita tunnistusnumeroita "kick"-komentoa varten.</p>
+<p>Komento "tracks" listaa kisat ja n‰ytt‰‰ mik‰ rata on parhaillaan kussakin ladattuna.</p>
+<p>Komento "update" p‰ivitt‰‰ palvelimen listan saatavilla olevista radoista. Katso lis‰tietoja alempaa kohdasta 
+"Ratojen yll‰pito".</p>
+<p>Komennolla "kick" p‰‰st‰‰n eroon ‰rsytt‰vist‰ pelaajista. Se ottaa parametrinaan poistettavan pelaajan 
+tunnistusnumeron tai sanan "all". Jos annetaan "all", kaikki pelaajat potkaistaan ulos palvelimelta, jos 
+tunnistusnumero, vain sen omaava pelaaja. Loogista, eikˆ totta?</p>
+<h4>2.4 Ratojen yll‰pito</h4>
+<p>Radat talletetaan <font face = "courier">tracks</font>-hakemistoon. Niill‰ on ".track"-p‰‰te. On yksi muu 
+tiedosto, jonka on sijaittava t‰ss‰ hakemistossa: <font face = "courier">
+tracklist</font>.</p>
+<p>Aina kun palvelin k‰ynnistet‰‰n tai sille annetaan "update"-komento, se lukee <font face = "courier">
+tracklist</font>-tiedostosta mitk‰ radat on asennettu. T‰m‰ tarkoittaa sit‰, ett‰ aina lis‰tess‰si uuden radan 
+<font face = "courier">tracks</font>-hakemistoon, sinun t‰ytyy lis‰t‰ <font face = "courier">
+tracklist</font>-tiedostoon rivi, joka sis‰lt‰‰ radan tiedostonimen ilman ".track"-p‰‰tett‰. Esimerkkin‰, 
+lis‰t‰ksesi radan "cooltrack.track", toimi seuraavasti:
+<li/>Tallenna "cooltrack.track"-tiedosto <font face = "courier">tracks</font>-hakemistoon
+<li/>Lis‰‰ rivi "cooltrack" <font face = "courier">tracklist</font>-tiedostoon
+<li/>Kutsu palvelimen "update"-komentoa tai k‰ynnist‰ palvelin
+</p>
+<p>Vastaavasti poistaessasi ratatiedoston sinun tulee poistaa siihen viittava rivi 
+<font face = "courier">tracklist</font>-tiedostosta.</p>
+<br/><a href ="#contents">Sis‰llys</a>
+<hr/>
+<h3 id = "tracks">3. Uusien ratojen luominen</h3>
+<p>Tracksailin ratatiedostot ovat tekstitiedostoja, joilla on ".track"-p‰‰te, ja siten muokattavissa 
+suosikkitekstieditorillasi. Ne tulee tallettaa "tracks"-hakemistoon. Tutustuttaaksemme sinut 
+ratatiedostojen syntaksiin, puramme askel askeleelta "default.track"-tiedoston, joka on osa pakettia.</p>
+<p>
+<br/>TRACK;Default
+<br/>LAPS;1 # Comments can be here as well
+<br/>MAXTIME;300
+<br/>CHANGEWIND;10
+<br/>MINWINDD;10
+<br/>MAXWINDD;40
+<br/>MINWINDV;10
+<br/>MAXWINDV;20
+<br/>NUMPORTS;5
+<br/># PORT;portboard_x;portboard_y;starboard_x;starboard_y
+<br/>PORT;10;40;30;-10
+<br/>PORT;160;50;170;10
+<br/>PORT;150;100;170;130
+<br/>PORT;50;80;30;100
+<br/>PORT;-100;30;-140;30
+<br/>
+<br/>Listaus 3.1: default.track
+</p>
+<p>Ratatiedosto koostuu lipuista (esim. TRACK), joita seuraavat kyseiseen lippuun liittyv‰t arvot. Liput 
+erotetaan arvoista ja arvot toisistaan puolipisteill‰ (;). Jokainen rivi alkaa lipulla ja sis‰lt‰‰ vain 
+yhden lipun. Kommentit alkavat risuaidalla (#) ja voivat olla joko omalla rivill‰‰n tai mink‰ hyv‰ns‰ 
+rivin lopussa.</p>
+<p>No niin, nyt kuin saimme nuo perusasiat pois jaloista, k‰yd‰‰n k‰siksi itse rataan. Ratatiedosto alkaa 
+"TRACK"-lipulla. Sit‰ seuraa yksi arvo, radan nimi. T‰m‰ on merkkijono, eik‰ ole mitenk‰‰n yhteydess‰ 
+radan tiedostonimeen. On kuitenkin rajoituksia - radan nimi ei voi sis‰lt‰‰ v‰lilyˆntej‰ tai puolipisteit‰.</p>
+<p>Seuraava lippu ratatiedostossa on "LAPS", jota seuraa yksi kokonaislukuarvo. T‰m‰ kertoo montako kertaa 
+rata kierret‰‰n ymp‰ri yhdess‰ kisassa.</p>
+<p>Sitten tulee "MAXTIME"-lippu, jota myˆskin seuraa kokonaislukuarvo. T‰m‰ kertoo montako sekuntia enint‰‰n 
+kisa kest‰‰. Kun t‰m‰ aika ylittyy, kisa loppuu - olivat kaikki maalissa tahi eiv‰t.</p>
+<p>Seuraavaksi p‰‰semme tuulenhallintalippuihin. N‰it‰ kaikkia seuraa yksi kokonaislukuarvo. "CHANGEWIND" 
+kertoo kuinka usein tuulen suunta ja voimakkuus muuttuu sekunneissa. "MINWINDD" ja "MAXWINDD" kertovat tuulen 
+minimi- ja maksimisuunnan vastaavasti. Suunta annetaan asteina nollan ollessa suoraan oikealle. "MINWINDV" ja 
+"MAXWINDV" asettavat minimi- ja maksimituulenvoimakkuuden metrein‰ sekunnissa.</p>
+<p>Kun tuulis‰‰dˆt on tehty, alamme asetella portteja radalle. "NUMPORTS" kertoo radan porttien m‰‰r‰n yhdell‰ 
+kokonaislukuarvolla. T‰t‰ rivi‰ seuraa niin monta "PORT"-lippua kuin rivi m‰‰ritt‰‰. Jokaista "PORT"-lippua 
+seuraa nelj‰ kokonaislukuarvoa, jotka antavat poijujen koordinaatit. Koordinaatit annetaan seuraavassa 
+j‰rjestyksess‰: paapuuripoijun x-koordinaatti, paapuuripoijun y-koordinaatti, styyrpuuripoijun x-koordinaatti, 
+styyrpuuripoijun y-koordinaatti. Aloituslinja asetetaan ensimm‰isen portin kohdalle, joten sinun t‰ytyy 
+huolehtia vain suhteellisista koordinaateista suunnitellessasi rataa.</p>
+<p>Portit ovat viimeinen asia, mink‰ ratatiedosto m‰‰ritt‰‰. Ei kovin vaikeaa, eih‰n? Eli anna menn‰ ja luo 
+unelmaratasi! 8-)</p>
+<br/><a href ="#contents">Sis‰llys</a>
+</body>
+</html>
