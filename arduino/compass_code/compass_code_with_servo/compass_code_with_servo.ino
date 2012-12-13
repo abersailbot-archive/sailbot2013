@@ -53,7 +53,7 @@ void loop() {
   Serial.print(", Roll=");
   Serial.println(roll);
  
-  delay(200); // Do this at approx 10Hz
+  delay(200); // Do this at approx 5Hz
   
   myservo.write(180 - heading/2);
 }
