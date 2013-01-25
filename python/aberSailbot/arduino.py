@@ -9,7 +9,8 @@ class Arduino(object):
     device = '/dev/ttyUSB0'
     baudRate = 9600
     def __init__(self):
-        self.__queue = QueueManager(device, baudRate)
+        self.__queue = QueueManager(self.device, self.baudRate)
+        self.__queue.connect()
         time.sleep(1) # sleep for a second to give the arduino time to reset
 
     def send_message(self, message):
@@ -32,32 +33,35 @@ class QueueManager(object):
         self.activeConnection = False
 
     def runInput(self):
+        print 'from input thread'
         while self.keepRunning:
             try:
                 inputline = self.serialPort.readline()
                 self.inp.put(inputline.rstrip())
-            except:
+            except Exception, e:
                 # connection closed
-                pass
+                print e
 
     def runOutput(self):
+        print 'from output thread'
         while self.keepRunning:
-            try:
-                outputline = self.out.get()
-                self.serialPort.write(outputline + '\n')
-            except:
-                # connection closed
-                pass
+            if not self.out.empty():
+                outputline = self.out.get_nowait()
+                print 'sending message', outputline
+                self.serialPort.write(outputline + 'qweweq\n')
 
-    def connect(self,filename):
+    def connect(self):
+        #self.outputThread.join()
+
         if self.activeConnection:
             self.close()
             self.activeConnection = False
-        try:
-            self.serialPort = serial.Serial(self.device, self.baudRate)
-        except serial.SerialException:
-            self.inp.put('error, can\'t connect')
-            return
+        #try:
+        self.serialPort = serial.Serial(self.device, self.baudRate)
+        #except serial.SerialException:
+        #    print 'error'
+        #    self.inp.put('error, can\'t connect')
+        #     return
         self.keepRunning = True
         self.inputThread = threading.Thread(target=self.runInput)
         self.inputThread.daemon = True
@@ -75,3 +79,7 @@ class QueueManager(object):
         self.outputThread.join()
         self.inp.put('IOHALT')
 
+if __name__ == '__main__':
+    a = Arduino()
+    for i in range(5):
+        a.send_message('hi there')
