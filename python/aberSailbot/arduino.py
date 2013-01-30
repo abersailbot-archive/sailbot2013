@@ -1,44 +1,61 @@
 import serial
-import time
-import threading
-import Queue
+from threading import Lock
+
+class ArduinoDevice(object):
+    """
+    A device attached to an Arduino. The protocol is to send a single character
+    representing the device ID, then another (if necessary) to specify what
+    information should be retrieved.
+    For example:
+
+    ArduinoDevice('G').request('r', 10) -> Gr(10)
+    ArduinoDevice('C').request('h') -> Ch
+
+    The Arduino then returns a single line response. The line may be empty
+    """
+    def __init__(self, id, arduino=None):
+        """Construct a device with a given id"""
+        self.arduino = arduino or Arduino.get()
+        self.id = id
+
+    def request(self, thing='', *args):
+        """Request something from the arduino"""
+        command = self.id + thing
+        if args:
+            command += '(' + ','.join(str(r) for r in args) + ')'
+
+        return self.arduino.sendCommand(command)
+
 
 class Arduino(object):
-    # Arduino will probably be on one of these devices :
-    # /dev/ttyUSB0 ttyUSB1 ttyUSB2 ttyUSB3 ttyS0 ttyS1 ttyS2 ttyS3
-    device = '/dev/ttyUSB0'
-    baudRate = 9600
-    class InputThread(threading.Thread):
-        def __init__(self, queue, serial):
-            threading.Thread.__init__(self)
-            self.queue = queue
-            self.serial = serial
+    """The arduino itself, and basic communications with it"""
+    def __init__(self, port):
+        try:
+            self.port = serial.Serial(port)
+            self.port.open()
+            self._lock = Lock()
+        except Exception:
+            raise Exception('Cannot connect to arduino on %s' % port)
 
-        def run(self):
-            while True:
-                inputline = self.serial.readline()
-                self.queue.put(inputline.rstrip())
 
-    def __init__(self):
-        self.serialPort = serial.Serial(self.device, self.baudRate)
-        time.sleep(1) # sleep for a second to give the arduino time to reset
-        self.inputQueue = Queue.Queue()
-        self.inp = self.InputThread(self.inputQueue, self.serialPort)
-        self.inp.setDaemon(True)
-        self.inp.start()
+    def sendCommand(self, c):
+        """
+        Send a short command, and return a single line response. Prevents
+        other threads interweaving requests by locking on self._lock
+        """
+        with self._lock:
+            self.port.flushInput()
+            self.port.write(c)
+            return self.port.readline()
 
-    def send_message(self, message):
-        self.serialPort.write(message + '\n')
-
-    def read(self):
-        if not self.queue.empty():
-            inputline = self.queue.get_nowait()
-            self.inp.put(inputline.rstrip())
-
-if __name__ == '__main__':
-    #test it
-    a = Arduino()
-    for i in range(5):
-        a.send_message('hello usb port')
-        print 'got', a.read()
-        time.sleep(3)
+    _mainArduino = None
+            
+    @classmethod
+    def get(cls):
+        """
+        A lazy singleton, using the default port. This should be used instead of
+        calling the constructor, to prevent the serial port being opened twice
+        """
+        if not cls._mainArduino:
+            _mainArduino = cls('/dev/ttyUSB0')
+        return _mainArduino 
