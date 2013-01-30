@@ -59,3 +59,8 @@ class Arduino(object):
         if not cls._mainArduino:
             _mainArduino = cls('/dev/ttyUSB0')
         return _mainArduino 
+
+if __name__ == '__main__':
+    a = ArduinoDevice('T') #create a test device on the arduino
+    print a.request('a') #request some value
+    print a.request('b', 10, 20) #request some other value using some arguments
