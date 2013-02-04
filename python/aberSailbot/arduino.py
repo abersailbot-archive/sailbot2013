@@ -1,77 +1,66 @@
 import serial
-import time
-import threading
-import Queue
+from threading import Lock
+
+class ArduinoDevice(object):
+    """
+    A device attached to an Arduino. The protocol is to send a single character
+    representing the device ID, then another (if necessary) to specify what
+    information should be retrieved.
+    For example:
+
+    ArduinoDevice('G').request('r', 10) -> Gr(10)
+    ArduinoDevice('C').request('h') -> Ch
+
+    The Arduino then returns a single line response. The line may be empty
+    """
+    def __init__(self, id, arduino=None):
+        """Construct a device with a given id"""
+        self.arduino = arduino or Arduino.get()
+        self.id = id
+
+    def request(self, thing='', *args):
+        """Request something from the arduino"""
+        command = self.id + thing
+        if args:
+            command += '(' + ','.join(str(r) for r in args) + ')'
+
+        return self.arduino.sendCommand(command)
+
 
 class Arduino(object):
-    # Arduino will probably be on one of these devices :
-    # /dev/ttyUSB0 ttyUSB1 ttyUSB2 ttyUSB3 ttyS0 ttyS1 ttyS2 ttyS3
-    device = '/dev/ttyUSB0'
-    baudRate = 9600
-    def __init__(self):
-        self.__queue = QueueManager(device, baudRate)
-        time.sleep(1) # sleep for a second to give the arduino time to reset
-
-    def send_message(self, message):
-        self.__queue.out.put(message)
-
-    def read(self):
+    """The arduino itself, and basic communications with it"""
+    def __init__(self, port):
         try:
-            return self.__queue.out.get_nowait()
-        except Queue.Empty:
-            return None
+            self.port = serial.Serial(port)
+            self.port.open()
+            self._lock = Lock()
+        except Exception:
+            raise Exception('Cannot connect to arduino on %s' % port)
 
-class QueueManager(object):
-    def __init__(self, device, baudRate=9600):
-        self.inp = Queue.Queue()
-        self.out = Queue.Queue()
-        self.device = device
-        self.baudRate = baudRate
 
-        self.keepRunning = True
-        self.activeConnection = False
+    def sendCommand(self, c):
+        """
+        Send a short command, and return a single line response. Prevents
+        other threads interweaving requests by locking on self._lock
+        """
+        with self._lock:
+            self.port.flushInput()
+            self.port.write(c)
+            return self.port.readline()
 
-    def runInput(self):
-        while self.keepRunning:
-            try:
-                inputline = self.serialPort.readline()
-                self.inp.put(inputline.rstrip())
-            except:
-                # connection closed
-                pass
+    _mainArduino = None
+            
+    @classmethod
+    def get(cls):
+        """
+        A lazy singleton, using the default port. This should be used instead of
+        calling the constructor, to prevent the serial port being opened twice
+        """
+        if not cls._mainArduino:
+            _mainArduino = cls('/dev/ttyUSB0')
+        return _mainArduino 
 
-    def runOutput(self):
-        while self.keepRunning:
-            try:
-                outputline = self.out.get()
-                self.serialPort.write(outputline + '\n')
-            except:
-                # connection closed
-                pass
-
-    def connect(self,filename):
-        if self.activeConnection:
-            self.close()
-            self.activeConnection = False
-        try:
-            self.serialPort = serial.Serial(self.device, self.baudRate)
-        except serial.SerialException:
-            self.inp.put('error, can\'t connect')
-            return
-        self.keepRunning = True
-        self.inputThread = threading.Thread(target=self.runInput)
-        self.inputThread.daemon = True
-        self.inputThread.start()
-        self.outputThread = threading.Thread(target=self.runOutput)
-        self.outputThread.daemon = True
-        self.outputThread.start()
-        self.activeConnection = True
-
-    def close(self):
-        self.keepRunning = False;
-        self.serialPort.close()
-        self.out.put(' ')
-        self.inputThread.join()
-        self.outputThread.join()
-        self.inp.put('IOHALT')
-
+if __name__ == '__main__':
+    a = ArduinoDevice('T') #create a test device on the arduino
+    print a.request('a') #request some value
+    print a.request('b', 10, 20) #request some other value using some arguments
