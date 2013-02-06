@@ -1,35 +1,9 @@
 import serial
 from threading import Lock
 
-class ArduinoDevice(object):
-    """
-    A device attached to an Arduino. The protocol is to send a single character
-    representing the device ID, then another (if necessary) to specify what
-    information should be retrieved.
-    For example:
-
-    ArduinoDevice('G').request('r', 10) -> Gr(10)
-    ArduinoDevice('C').request('h') -> Ch
-
-    The Arduino then returns a single line response. The line may be empty
-    """
-    def __init__(self, id, arduino=None):
-        """Construct a device with a given id"""
-        self.arduino = arduino or Arduino.get()
-        self.id = id
-
-    def request(self, thing='', *args):
-        """Request something from the arduino"""
-        command = self.id + thing
-        if args:
-            command += '(' + ','.join(str(r) for r in args) + ')'
-
-        return self.arduino.sendCommand(command)
-
-
 class Arduino(object):
-    """The arduino itself, and basic communications with it"""
-    def __init__(self, port):
+    """The arduino and basic communications with devices attached to it"""
+    def __init__(self, port='/dev/ttyACM0'):
         try:
             self.port = serial.Serial(port)
             self.port.open()
@@ -38,29 +12,29 @@ class Arduino(object):
             raise Exception('Cannot connect to arduino on %s' % port)
 
 
-    def sendCommand(self, c):
+    def __sendCommand(self, c):
         """
         Send a short command, and return a single line response. Prevents
         other threads interweaving requests by locking on self._lock
         """
         with self._lock:
+            print 'I sent', c
             self.port.flushInput()
             self.port.write(c)
             return self.port.readline()
 
-    _mainArduino = None
-            
-    @classmethod
-    def get(cls):
-        """
-        A lazy singleton, using the default port. This should be used instead of
-        calling the constructor, to prevent the serial port being opened twice
-        """
-        if not cls._mainArduino:
-            _mainArduino = cls('/dev/ttyUSB0')
-        return _mainArduino 
+    def getCompass(self):
+        return self.__sendCommand('c')
 
 if __name__ == '__main__':
-    a = ArduinoDevice('T') #create a test device on the arduino
-    print a.request('a') #request some value
-    print a.request('b', 10, 20) #request some other value using some arguments
+    import time
+    a = Arduino() #create a test device on the arduino
+    a.getCompass()
+
+    #s=serial.Serial('/dev/ttyACM0')
+    #s.open()
+    #while True:
+    #    s.write('aa')
+    #    time.sleep(1)
+    #    print s.readline()
+
