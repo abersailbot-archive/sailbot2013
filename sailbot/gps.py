@@ -86,7 +86,6 @@ class Gps(object):
                 ]
         d = AttributeDict()
         for i in range(len(fields)):
-            print i, names[i], fields[i]
             d[names[i]] = fields[i]
         return d
 
