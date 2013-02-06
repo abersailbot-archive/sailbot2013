@@ -33,16 +33,16 @@ class Arduino(object):
         """
         Set the rudder servo to an angle between 0 and 255
         """
-        return self.__sendCommand('r%03d' % str(angle))
+        return self.__sendCommand('r%03d' % angle)
 
     def setSail(self, angle):
         """
         Set the sail servo to an angle between 0 and 255
         """
-        return self.__sendCommand('s%03d' % str(angle))
+        return self.__sendCommand('s%03d' % angle)
 
 if __name__ == '__main__':
     import time
     a = Arduino() #create a test device on the arduino
-    time.sleep(1)
-    print a.getCompass()
+    time.sleep(2)
+    print a.setRudder(0)
