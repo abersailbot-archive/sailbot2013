@@ -1,0 +1,9 @@
+# A small example of what the boat api could look like
+b = boat()
+b.setTarget(342.34, 993.3434)
+if b.targetWithin(5): #meters
+   b.setPath([(23,334), (23,34), (25, 36)])
+
+while b.hasTarget:
+    if b.targetWithin(5):
+        b.nextTarget()
