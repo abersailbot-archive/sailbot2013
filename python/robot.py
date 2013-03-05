@@ -20,7 +20,7 @@ class Robot(object):
         self.streamer = NMEAStream()
 
     def log(self):
-        '''Log the output of most of the sensors'''
+        """Log the output of most of the sensors"""
         l = 'Time: {time}, Heading: {head}, Wind: {wind}, Coords: {coords}\n'.format(
                 time = time.asctime(),
                 head = self._arduino.getCompass(),
@@ -31,6 +31,7 @@ class Robot(object):
             f.write(l)
 
     def getCoords(self):
+        """Return the current coordinates from the GPS"""
         response = self._serialport.readline(None)
         try:
             data_obs = self.streamer.get_objects(data=response)
@@ -47,6 +48,7 @@ class Robot(object):
             print e
 
     def _getGGA(self, nmeaOb):
+        """Return the coordinates from a nmea object"""
         lat_deg = float(nmeaOb.latitude[:2])
         lat_min = float(nmeaOb.latitude[2:9])
         lat_min_dec = lat_min/60
