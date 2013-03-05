@@ -23,22 +23,20 @@ class Arduino(object):
             self.port.write(c + '\n')
             return self.port.readline()
 
+    def getWind(self):
+        """Get the angle from the wind sensor """
+        return self.__sendCommand('w')
+
     def getCompass(self):
-        """
-        Get the heading from the compass
-        """
+        """Get the heading from the compass"""
         return self.__sendCommand('c')
 
     def setRudder(self, angle):
-        """
-        Set the rudder servo to an angle between 0 and 255
-        """
+        """Set the rudder servo to an angle between 0 and 255"""
         return self.__sendCommand('r%03d' % angle)
 
     def setSail(self, angle):
-        """
-        Set the sail servo to an angle between 0 and 255
-        """
+        """Set the sail servo to an angle between 0 and 255"""
         return self.__sendCommand('s%03d' % angle)
 
 if __name__ == '__main__':
