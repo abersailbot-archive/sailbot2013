@@ -2,10 +2,8 @@ from arduino import Arduino
 import config
 
 from pynmea.streamer import NMEAStream
-from pynmea import nmea
 from pynmea.nmea import NMEASentence
 import serial
-import math
 import time
 
 class Boat(object):
@@ -25,14 +23,14 @@ class Boat(object):
         """Log the output of most of the sensors"""
         l = 'Time: {time}, Heading: {head}, Wind: {wind}, Coords: {coords}\n'.format(
                 time = time.asctime(),
-                head = self._arduino.getCompass(),
-                wind = self._arduino.getWind(),
-                coords = self.getCoords()
+                head = self._arduino.get_compass(),
+                wind = self._arduino.get_wind(),
+                coords = self.get_coords()
             )
         with open('logfile', 'a') as f:
             f.write(l)
 
-    def getCoords(self):
+    def get_coords(self):
         """Return the current coordinates from the GPS"""
         response = self._gpsSerial.readline(None)
         try:
@@ -42,7 +40,7 @@ class Boat(object):
             if len(data_obs) > 0:
                 if data_obs[0].sen_type == "GPGGA":
                     if data_obs[0].check_chksum():
-                        location = self._getGGA(data_obs[0])
+                        location = self._get_GGA(data_obs[0])
                         return location
                     else:
                         print "checksum failed"
@@ -51,7 +49,7 @@ class Boat(object):
             print e
             return (-1, -1)
 
-    def _getGGA(self, nmeaOb):
+    def _get_GGA(self, nmeaOb):
         """Return the coordinates from a nmea object"""
         lat_deg = float(nmeaOb.latitude[:2])
         lat_min = float(nmeaOb.latitude[2:9])
