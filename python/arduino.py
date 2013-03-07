@@ -1,10 +1,14 @@
 import serial
 from threading import Lock
+import config
 
 class Arduino(object):
     """The arduino and basic communications with devices attached to it"""
-    def __init__(self, port='/dev/ttyACM0'):
+    def __init__(self, port=None):
         try:
+            if port is None:
+                #use the port defined in the config file
+                port = config.arduinoSerialport
             self.port = serial.Serial(port)
             self.port.open()
             self._lock = Lock()

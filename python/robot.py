@@ -1,15 +1,17 @@
 from arduino import Arduino
-import time
+import config
+
 from pynmea.streamer import NMEAStream
 from pynmea import nmea
 from pynmea.nmea import NMEASentence
 import serial
 import math
+import time
 
 class Robot(object):
     def __init__(self):
         self._arduino = Arduino()
-        self._serialport = serial.Serial("/dev/ttyUSB0", 4800, timeout=0.5)
+        self._gpsSerial = serial.Serial(config.gpsSerialport, 4800, timeout=0.5)
 
         parse_map = (('Latitude' , 'lat'),
                      ('Direction', 'lat_dir'),
@@ -32,7 +34,7 @@ class Robot(object):
 
     def getCoords(self):
         """Return the current coordinates from the GPS"""
-        response = self._serialport.readline(None)
+        response = self._gpsSerial.readline(None)
         try:
             data_obs = self.streamer.get_objects(data=response)
             data_obs += self.streamer.get_objects(data='')
