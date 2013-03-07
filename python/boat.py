@@ -8,6 +8,7 @@ import time
 
 class Boat(object):
     def __init__(self):
+        """Constructor for the boat object"""
         self._arduino = Arduino()
         self._gpsSerial = serial.Serial(config.gpsSerialport, 4800, timeout=0.5)
 
