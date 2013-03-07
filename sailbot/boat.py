@@ -8,7 +8,7 @@ class Boat(object):
         self._arduino = Arduino()
         self._gps = Gps()
 
-    def log(self):
+    def log(self, logfilename='logfile'):
         """Log the output of most of the sensors"""
         l = 'Time: {time}, Heading: {head}, Wind: {wind}, Coords: {coords}\n'.format(
                 time = time.asctime(),
@@ -16,6 +16,5 @@ class Boat(object):
                 wind = self._arduino.get_wind(),
                 coords = self._gps.get_coords()
             )
-        with open('logfile', 'a') as f:
+        with open(logfilename, 'a') as f:
             f.write(l)
-

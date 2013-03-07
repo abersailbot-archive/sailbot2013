@@ -1,0 +1,1 @@
+from boat import Boat
