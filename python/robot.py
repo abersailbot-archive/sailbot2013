@@ -11,10 +11,10 @@ class Robot(object):
         self._arduino = Arduino()
         self._serialport = serial.Serial("/dev/ttyUSB0", 4800, timeout=0.5)
 
-        parse_map = (("Latitude" , "lat"),
-                     ("Direction", "lat_dir"),
-                     ("Longitude", "lon"),
-                     ("Direction", "lon_dir"))
+        parse_map = (('Latitude' , 'lat'),
+                     ('Direction', 'lat_dir'),
+                     ('Longitude', 'lon'),
+                     ('Direction', 'lon_dir'))
 
         self.nmea = NMEASentence(parse_map)
         self.streamer = NMEAStream()
