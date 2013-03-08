@@ -1,4 +1,8 @@
 import math
+from math import sin as sin
+from math import cos as cos
+
+EARTH_RADIUS = 6371009 #in meters
 
 class Point(object):
     def __init__(self, latitude, longitude):
@@ -35,6 +39,14 @@ class Point(object):
     def long_radians(self):
         return self._to_radians(self.long)
 
+    def distance_to(self, point):
+        angle = math.acos(
+                sin(self.lat_radians) * sin(point.lat_radians) +
+                cos(self.lat_radians) * cos(point.lat_radians) *
+                cos(self.long_radians - point.long_radians)
+            )
+        return angle * EARTH_RADIUS
+
 #do a couple of tests
 if __name__ == '__main__':
     castle = Point(52.41389, -4.09098) #aber castle
@@ -43,3 +55,4 @@ if __name__ == '__main__':
     print hill.lat_radians, hill.long_radians
 
     #distance should be ~1.29844 km
+    print hill.distance_to(castle)
