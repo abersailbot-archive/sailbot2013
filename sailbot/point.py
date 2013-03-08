@@ -11,6 +11,9 @@ class Point(object):
         else:
             raise IndexError('Point objects can only have two coordinates')
 
+    def __iter__(self):
+        return iter([self.lat, self.long])
+
     @property
     def lat(self):
         return self._lat
@@ -23,6 +26,9 @@ class Point(object):
 if __name__ == '__main__':
     castle = Point(52.41389, -4.09098) #aber castle
     hill = Point(52.42459, -4.08339) #Constitution hill
-    #distance should be ~1.29844 km
     print hill.lat, hill.long
     print hill[0], hill[1]
+    for p in hill:
+        print p,
+
+    #distance should be ~1.29844 km
