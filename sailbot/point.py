@@ -45,7 +45,7 @@ class Point(object):
         """Return the longitude in radians"""
         return self._to_radians(self.long)
 
-    def distance_to(self, point):
+    def spherical_law_of_cosines(self, point):
         """Return the distance between two points in meters"""
         angle = math.acos(
                 sin(self.lat_radians) * sin(point.lat_radians) +
@@ -54,12 +54,24 @@ class Point(object):
             )
         return angle * EARTH_RADIUS
 
+    def haversine(self, point):
+        delta_lat = point.lat_radians - self.lat_radians
+        delta_long = point.long_radians - self.long_radians
+
+        a = (sin(delta_lat/2) * sin(delta_lat/2) +
+            cos(self.lat_radians) * cos(point.lat_radians) * 
+            sin(delta_long/2) * sin(delta_long/2))
+        c = 2 * math.atan2(math.sqrt(a), math.sqrt(1-a))
+        return c * EARTH_RADIUS
+
 #do a couple of tests
 if __name__ == '__main__':
     castle = Point(52.41389, -4.09098) #aber castle
+    small = Point(52.413877, -4.091050)
     hill = Point(52.42459, -4.08339) #Constitution hill
     print hill.lat, hill.long
     print hill.lat_radians, hill.long_radians
 
     #distance should be ~1.29844 km
-    print hill.distance_to(castle)
+    print castle.spherical_law_of_cosines(small)
+    print castle.haversine(small)
