@@ -22,12 +22,12 @@ class Gps(object):
             data_obs += self.streamer.get_objects(data='')
 
             if len(data_obs) > 0:
-                if data_obs[0].sen_type == "GPGGA":
+                if data_obs[0].sen_type == 'GPGGA':
                     if data_obs[0].check_chksum():
                         location = self._get_GGA(data_obs[0])
                         return location
                     else:
-                        print "checksum failed"
+                        print 'checksum failed'
                         return (-1, -1)
         except Exception, e:
             print e
