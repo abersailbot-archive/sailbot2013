@@ -32,18 +32,15 @@ class Point(object):
         """Return the longitude in degrees"""
         return self._long
 
-    def _to_radians(self, degrees):
-        return degrees * (math.pi/180)
-
     @property
     def lat_radians(self):
         """Return the latitude in radians"""
-        return self._to_radians(self.lat)
+        return math.radians(self.lat)
 
     @property
     def long_radians(self):
         """Return the longitude in radians"""
-        return self._to_radians(self.long)
+        return math.radians(self.long)
 
     def spherical_law_of_cosines(self, point):
         """Return the distance between two points in meters"""
