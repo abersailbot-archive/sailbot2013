@@ -1,3 +1,5 @@
+import math
+
 class Point(object):
     def __init__(self, latitude, longitude):
         self._lat = latitude
@@ -22,13 +24,22 @@ class Point(object):
     def long(self):
         return self._long
 
+    def _to_radians(self, degrees):
+        return degrees * (math.pi/180)
+
+    @property
+    def lat_radians(self):
+        return self._to_radians(self.lat)
+
+    @property
+    def long_radians(self):
+        return self._to_radians(self.long)
+
 #do a couple of tests
 if __name__ == '__main__':
     castle = Point(52.41389, -4.09098) #aber castle
     hill = Point(52.42459, -4.08339) #Constitution hill
     print hill.lat, hill.long
-    print hill[0], hill[1]
-    for p in hill:
-        print p,
+    print hill.lat_radians, hill.long_radians
 
     #distance should be ~1.29844 km
