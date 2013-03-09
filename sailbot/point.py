@@ -65,12 +65,16 @@ class Point(object):
              sin(self.lat_radians) * cos(point.lat_radians) * cos(delta_long)
             )
         radians = math.atan2(y, x)
-        return math.degrees(radians)
+        return Bearing.from_radians(radians)
 
 class Bearing(object):
     """An angle between 0 and 360 degrees"""
     def __init__(self, degrees):
         self._degrees = float(degrees % 360)
+
+    @classmethod
+    def from_radians(cls, radians):
+        return cls(math.degrees(radians))
 
     @property
     def degrees(self):
