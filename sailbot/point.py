@@ -10,6 +10,11 @@ class Point(object):
         self._lat = latitude
         self._long = longitude
 
+    @classmethod
+    def from_radians(cls, lat_radians, long_radians):
+        """Return a new instance of Point from a pair of coordinates in radians"""
+        return cls(math.degrees(lat_radians), math.degrees(long_radians))
+
     def __getitem__(self, key):
         if key == 0:
             return self._lat
