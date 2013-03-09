@@ -29,7 +29,7 @@ class Point(object):
 
     def __str__(self):
         """Return a string representation of the point"""
-        return '{0:0.2f}N, {0:0.2f}W'.format(*list(self))
+        return '{0:0.2f}N, {1:0.2f}W'.format(*list(self))
 
     @property
     def lat(self):
