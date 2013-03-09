@@ -3,22 +3,28 @@ import config
 import serial
 
 class AttributeDict(dict):
-        """Access elements of the dict as attributes"""
-        def __getattr__(self, attr):
-            return self[attr]
+    """Access elements of the dict as attributes"""
+    def __getattr__(self, attr):
+        return self[attr]
 
-        def __setattr__(self, attr, value):
-            self[attr] = value
+    def __setattr__(self, attr, value):
+        self[attr] = value
 
 class Gps(object):
+    """A GPS receiver"""
     def __init__(self):
-        #self._gpsSerial = serial.Serial(config.gpsSerialport, 4800, timeout=0.5)
-        pass
+        self._gpsSerial = serial.Serial(config.gpsSerialport, 4800, timeout=0.5)
 
-    def get_coords(self):
-        """Return the current coordinates from the GPS"""
-        #line = self._gpsSerial.readline(None)
-        pass
+    def position(self):
+        """Return a Point containing the current coordinates from the GPS"""
+        line = self._gpsSerial.readline(None)
+        if self._checksum(line):
+            fields = self._name_fields(line)
+            lat = self._parse_degrees(fields.lat)
+            long = self._parse_degrees(fields.long)
+            return Point(lat, long)
+        else:
+            raise ValueError('Checksum failed')
 
     def _parse_degrees(self, degrees):
         """
@@ -62,6 +68,4 @@ class Gps(object):
 if __name__ == '__main__':
     demoline = "$GPGGA,113245.000,5223.9915,N,00352.1781,W,1,08,1.0,329.0,M,50.9,M,,0000*4A"
     gps = Gps()
-    f=gps._name_fields(demoline)
-    print gps._parse_degrees(f.lat)
-    print gps._checksum(demoline)
+    print gps.position()
