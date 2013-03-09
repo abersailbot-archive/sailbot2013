@@ -89,6 +89,9 @@ class Bearing(object):
     def __radd__(self, n):
         return float(self) + float(n)
 
+    def __str__(self):
+        return '{0:0.2f} degrees clockwise from north'.format(self.degrees)
+
 #do a couple of tests
 if __name__ == '__main__':
     castle = Point(52.41389, -4.09098) #aber castle
@@ -101,8 +104,4 @@ if __name__ == '__main__':
     print castle.bearing_to(hill)
     
     # should be ~90 degrees
-    print Point(52.41398, -4.09122).bearing_to(Point(52.41398, -4.4627))
-
-    b = Bearing(-50)
-    b = 5 + b
-    print float(b)
+    print Point(52.41398, -4.4627).bearing_to(Point(52.41398, -4.09122))
