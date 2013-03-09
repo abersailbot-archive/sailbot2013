@@ -40,6 +40,7 @@ class Gps(object):
         return check_digits == x
 
     def _name_fields(self, line):
+        """Return an AttributeDict containing the more important GGA fields"""
         fields = line[1:-3].split(',')[1:8]
         names = [
                     'time',
