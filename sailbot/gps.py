@@ -20,9 +20,10 @@ class Gps(object):
         line = self._gpsSerial.readline(None)
         if self._checksum(line):
             fields = self._name_fields(line)
-            lat = self._parse_degrees(fields.lat)
-            long = self._parse_degrees(fields.long)
-            return Point(lat, long)
+            if fields.id == 'GPGGA':
+                lat = self._parse_degrees(fields.lat)
+                long = self._parse_degrees(fields.long)
+                return Point(lat, long)
         else:
             raise ValueError('Checksum failed')
 
@@ -47,8 +48,9 @@ class Gps(object):
 
     def _name_fields(self, line):
         """Return an AttributeDict containing the more important GGA fields"""
-        fields = line[1:-3].split(',')[1:8]
+        fields = line[1:-3].split(',')[:8]
         names = [
+                    'id',
                     'time',
                     'lat',
                     'lat_direction',
