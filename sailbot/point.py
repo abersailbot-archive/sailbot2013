@@ -88,10 +88,16 @@ class Bearing(object):
         return self._degrees
 
     def __add__(self, n):
-        return float(self) + float(n)
+        return Bearing(float(self) + float(n)
 
     def __radd__(self, n):
-        return float(self) + float(n)
+        return Bearing(float(self) + float(n))
+
+    def __sub__(self, n):
+        return Bearing(float(self) - float(n))
+
+    def __rsub__(self, n):
+        return Bearing(float(n) - float(self))
 
     def __str__(self):
         return '{0:0.2f} degrees clockwise from north'.format(self.degrees)
