@@ -67,6 +67,24 @@ class Point(object):
         radians = math.atan2(y, x)
         return math.degrees(radians)
 
+class Bearing(object):
+    """An angle between 0 and 360 degrees"""
+    def __init__(self, degrees):
+        self._degrees = float(degrees % 360)
+
+    @property
+    def degrees(self):
+        return self._degrees
+
+    def __float__(self):
+        return self._degrees
+
+    def __add__(self, n):
+        return float(self) + float(n)
+
+    def __radd__(self, n):
+        return float(self) + float(n)
+
 #do a couple of tests
 if __name__ == '__main__':
     castle = Point(52.41389, -4.09098) #aber castle
@@ -77,5 +95,10 @@ if __name__ == '__main__':
     #distance should be ~1.29844 km
     print castle.distance_to(hill)
     print castle.bearing_to(hill)
-
+    
+    # should be ~90 degrees
     print Point(52.41398, -4.09122).bearing_to(Point(52.41398, -4.4627))
+
+    b = Bearing(-50)
+    b = 5 + b
+    print float(b)
