@@ -27,6 +27,10 @@ class Point(object):
         """Return an iterator containing the lat and long"""
         return iter([self.lat, self.long])
 
+    def __str__(self):
+        """Return a string representation of the point"""
+        return '{0:0.2f}N, {0:0.2f}W'.format(*list(self))
+
     @property
     def lat(self):
         """Return the latitude in degrees"""
@@ -95,9 +99,9 @@ class Bearing(object):
 #do a couple of tests
 if __name__ == '__main__':
     castle = Point(52.41389, -4.09098) #aber castle
+    print castle
     hill = Point(52.42459, -4.08339) #Constitution hill
-    print hill.lat, hill.long
-    print hill.lat_radians, hill.long_radians
+    print hill
 
     #distance should be ~1.29844 km
     print castle.distance_to(hill)
