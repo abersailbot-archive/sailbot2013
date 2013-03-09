@@ -2,7 +2,13 @@
 b = boat()
 b.setTarget(342.34, 993.3434)
 if b.targetWithin(5): #meters
-   b.setPath([(23,334), (23,34), (25, 36)])
+   b.setPath(
+              [
+                Point(23,334),
+                Point(23,34),
+                Point(25, 36)
+              ]
+            )
 
 while b.hasTarget:
     if b.targetWithin(5):
