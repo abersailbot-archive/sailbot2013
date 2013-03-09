@@ -21,15 +21,26 @@ class Gps(object):
         pass
 
     def _parse_degrees(self, degrees):
+        """
+        Return the decimal representation of a combined degree/minute string
+        """
         pointIndex = degrees.find('.') - 2
         return (
                 float(degrees[:pointIndex]) +
                 float(degrees[pointIndex:]) / 60
                )
 
+    def _checksum(self, line):
+        """Return True if the checksum passed"""
+        x = 0
+        for c in line[1:-3]:
+            x ^= ord(c)
+        x = str(hex(x))[2:].upper()
+        check_digits = line[-2:].upper()
+        return check_digits == x
 
     def _name_fields(self, line):
-        fields = line[line.find('$')+1:line.find('*')].split(',')[1:8]
+        fields = line[1:-3].split(',')[1:8]
         names = [
                     'time',
                     'lat',
@@ -52,3 +63,4 @@ if __name__ == '__main__':
     gps = Gps()
     f=gps._name_fields(demoline)
     print gps._parse_degrees(f.lat)
+    print gps._checksum(demoline)
