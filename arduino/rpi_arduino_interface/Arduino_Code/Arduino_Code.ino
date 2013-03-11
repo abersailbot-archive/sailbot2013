@@ -73,14 +73,14 @@ int readCompass(){
 }
 
 int readWindSensor(){
+  int windSensorPin = 11;
   int pulseLength=0;
   int windAngle=0;
-  pulseLength = pulseIn(11, HIGH, 2000);
+  pulseLength = pulseIn(windSensorPin, HIGH, 2000);
   int magic = 29;
   windAngle =((pulseLength*10)/29); // 29 is the magic number where pulse time of 1036 = 359
   setServo('R', (windAngle/2)); //Rudder Servo and Wind Sensor Test
   return (windAngle);
- 
 }
 
 void loop()
