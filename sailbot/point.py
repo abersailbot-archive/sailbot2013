@@ -88,7 +88,7 @@ class Bearing(object):
         return self._degrees
 
     def __add__(self, n):
-        return Bearing(float(self) + float(n)
+        return Bearing(float(self) + float(n))
 
     def __radd__(self, n):
         return Bearing(float(self) + float(n))
