@@ -27,6 +27,13 @@ class Gps(object):
         else:
             raise ValueError('Checksum failed')
 
+    def get_gga_line(self, attempts=5):
+        for i in range(attempts):
+            line = self._gpsSerial.readline(None)
+            if line.startswith('$GPGGA'):
+                return line
+        raise Exception('GPS didn\'t give a gga string in time')
+
     def _parse_degrees(self, degrees):
         """
         Return the decimal representation of a combined degree/minute string
