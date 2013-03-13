@@ -87,23 +87,20 @@ void loop()
 {
   getData();
   //inData[0] = 'c'; // Infinate Compass Read
-  Serial.write(inData);
   switch(inData[0]){
   case 'c' : 
-    Serial.print("CommandCharacter = c, Data = "); //Compass Read
-    Serial.println(readCompass());
+    Serial.println(readCompass()); //Compass Read
     break;
   case 'w' : 
-    Serial.print("CommandCharacter = w, Data = "); //Wind Sensor Read
-    Serial.println(readWindSensor());
+    Serial.println(readWindSensor()); //Wind Sensor Read
     break;
   case 'r' : 
-    Serial.println("CommandCharacter = r"); // Rudder Set
-    setServo('R', getAmount());
+    setServo('R', getAmount());// Rudder Set
+    Serial.println("1"); 
     break;
   case 's' : 
-    Serial.println("CommandCharacter = s"); // Sail Set
-    setServo('S', getAmount());
+    setServo('S', getAmount()); // Sail Set
+    Serial.println("1"); 
     break;
   }
 }
