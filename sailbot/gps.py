@@ -11,6 +11,8 @@ class AttributeDict(dict):
         self[attr] = value
 
 def _float_or_none(value):
+    """Return None if the input value is empty, else return the value converted
+    into a float"""
     if value:
         return float(value)
     else:
