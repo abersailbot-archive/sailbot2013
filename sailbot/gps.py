@@ -87,10 +87,5 @@ class Gps(object):
         return d
 
 if __name__ == '__main__':
-    demoline = '$GPGGA,113245.000,5223.9915,N,00352.1781,W,1,08,1.0,329.0,M,50.9,M,,0000*4A'
-    line = '$GPGGA,144143.113,,,,,0,00,,,M,0.0,M,,0000*52'
     gps = Gps()
-    print gps.checksum(line)
-    d = line.split(',')[2]
-    print d
-    print gps._parse_degrees(d)
+    print gps.position()
