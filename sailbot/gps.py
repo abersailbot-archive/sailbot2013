@@ -32,6 +32,10 @@ class Gps(object):
             if fields.id == 'GPGGA':
                 lat = self._parse_degrees(fields.lat)
                 long = self._parse_degrees(fields.long)
+                if lat is None:
+                    lat = -1
+                if long is None:
+                    long = -1
                 return Point(lat, long)
         else:
             raise ValueError('Checksum failed')
