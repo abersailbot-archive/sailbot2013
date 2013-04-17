@@ -36,7 +36,7 @@ class Gps(object):
         else:
             raise ValueError('Checksum failed')
 
-    def get_gga_line(self, attempts=5):
+    def get_gga_line(self, attempts=10):
         for i in range(attempts):
             line = self._gpsSerial.readline(None).strip()
             if line.startswith('$GPGGA'):
