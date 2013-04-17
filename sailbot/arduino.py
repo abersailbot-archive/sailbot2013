@@ -15,7 +15,6 @@ class Arduino(object):
         except Exception:
             raise Exception('Cannot connect to arduino on %s' % port)
 
-
     def __sendCommand(self, c):
         """
         Send a short command, and return a single line response. Prevents
