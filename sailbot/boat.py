@@ -18,3 +18,11 @@ class Boat(object):
             )
         with open(logfilename, 'a') as f:
             f.write(l)
+
+if __name__ == '__main__':
+    b = Boat()
+    while True:
+        b.arduino.set_rudder(45)
+        b.arduino.set_sail(45)
+        b.arduino.set_rudder(128)
+        b.arduino.set_sail(128)
