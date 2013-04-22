@@ -7,13 +7,15 @@
 Servo myRudderServo; // create servo object to control a servo 
 Servo mySailServo; // a maximum of eight servo objects can be created 
 
-char inData[5]; // Allocate some space for the string
+char inData[6]; // Allocate some space for the string
 
 void setup() {
   Serial.begin(9600); //Begin at 9600
   //Use .attach for setting up connection to the servo
-  myRudderServo.attach(10);
-  mySailServo.attach(9);
+  myRudderServo.attach(9, 500, 2000);
+  mySailServo.attach(10, 500, 1850);
+  myRudderServo.writeMicroseconds(1500);
+  mySailServo.writeMicroseconds(1500);
   pinMode(11, INPUT);  //Use pinMode for setting up connection to wind sensor
   pinMode(12, OUTPUT);
   Wire.begin(); // Initialize the I2C bus for the compass
@@ -38,20 +40,22 @@ void getData() {
 }
 
 void setServo(char servoChar, int turnAmount){
-  if(servoChar = 'R'){
-    myRudderServo.write(turnAmount);
+  if('R' == servoChar){
+    myRudderServo.writeMicroseconds(turnAmount);
+    //myRudderServo.writeMicroseconds(500);
   }
   else{
-    mySailServo.write(turnAmount);
+    mySailServo.writeMicroseconds(turnAmount);
+    //mySailServo.writeMicroseconds(500);
   }
 }
 
 int getAmount(){
-  char newArray[3] = {
-    inData[1], inData[2], inData[3]    };
+ // char newArray[5] = {
+ //   inData[1], inData[2], inData[3], inData[4], 0    };
   int turnAmount;
-  turnAmount = (int) strtol(newArray, NULL, 10);
-  //Serial.print(turnAmount);
+  turnAmount = (int) strtol(inData+1, NULL, 10);
+  Serial.println(turnAmount);
   return turnAmount;
 }
 
@@ -94,12 +98,14 @@ void loop()
     Serial.println(readWindSensor()); //Wind Sensor Read
     break;
   case 'r' : 
+      Serial.println("r"); 
     setServo('R', getAmount());// Rudder Set
-    Serial.println("1"); 
+
     break;
   case 's' : 
+      Serial.println("s"); 
     setServo('S', getAmount()); // Sail Set
-    Serial.println("1"); 
+
     break;
   }
 }
