@@ -1,5 +1,6 @@
 from arduino import Arduino
 from gps import Gps
+from xbee import Xbee
 import time
 
 class Boat(object):
@@ -7,6 +8,7 @@ class Boat(object):
         """Constructor for the boat object"""
         self.arduino = Arduino()
         self._gps = Gps()
+        self._xbee = Xbee()
 
     def log(self, logfilename='logfile'):
         """Log the output of most of the sensors"""
@@ -16,8 +18,15 @@ class Boat(object):
                 wind = self.arduino.get_wind(),
                 pos = self._gps.position()
             )
+        # write to log file
         with open(logfilename, 'a') as f:
             f.write(l)
+
+        # write to xbee
+        self._xbee.send(l)
+
+        # write to console
+        print l
 
 if __name__ == '__main__':
     b = Boat()
