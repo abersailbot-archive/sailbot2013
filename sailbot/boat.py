@@ -21,8 +21,11 @@ class Boat(object):
 
 if __name__ == '__main__':
     b = Boat()
+    time.sleep(1)
     while True:
-        b.arduino.set_rudder(45)
-        b.arduino.set_sail(45)
-        b.arduino.set_rudder(128)
-        b.arduino.set_sail(128)
+        b.arduino.set_rudder(1000)
+        time.sleep(10)
+        b.arduino.set_sail(1000)
+        b.arduino.set_rudder(2000)
+        time.sleep(10)
+        b.arduino.set_sail(2000)
