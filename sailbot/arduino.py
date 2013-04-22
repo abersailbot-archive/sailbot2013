@@ -35,11 +35,11 @@ class Arduino(object):
         return int(self.__sendCommand('c'))
 
     def set_rudder(self, angle):
-        """Set the rudder servo to an angle between 0 and 255"""
+        """Set the rudder servo to a value between 1000 and 2000"""
         return self.__sendCommand('r%03d' % angle)
 
     def set_sail(self, angle):
-        """Set the sail servo to an angle between 0 and 255"""
+        """Set the sail servo to a value between 1000 and 1850"""
         return self.__sendCommand('s%03d' % angle)
 
 if __name__ == '__main__':
