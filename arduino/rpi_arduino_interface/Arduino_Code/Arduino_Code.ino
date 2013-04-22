@@ -12,8 +12,8 @@ char inData[5]; // Allocate some space for the string
 void setup() {
   Serial.begin(9600); //Begin at 9600
   //Use .attach for setting up connection to the servo
-  myRudderServo.attach(9);
-  mySailServo.attach(10);
+  myRudderServo.attach(10);
+  mySailServo.attach(9);
   pinMode(11, INPUT);  //Use pinMode for setting up connection to wind sensor
   pinMode(12, OUTPUT);
   Wire.begin(); // Initialize the I2C bus for the compass
