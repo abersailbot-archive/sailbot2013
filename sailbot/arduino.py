@@ -28,11 +28,11 @@ class Arduino(object):
 
     def get_wind(self):
         """Get the angle from the wind sensor """
-        return self.__sendCommand('w')
+        return int(self.__sendCommand('w'))
 
     def get_compass(self):
         """Get the heading from the compass"""
-        return self.__sendCommand('c')
+        return int(self.__sendCommand('c'))
 
     def set_rudder(self, angle):
         """Set the rudder servo to an angle between 0 and 255"""
