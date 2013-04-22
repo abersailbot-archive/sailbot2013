@@ -25,7 +25,10 @@ class Gps(object):
 
     def position(self):
         """Return a Point containing the current coordinates from the GPS"""
-        line = self.get_gga_line()
+        try:
+            line = self.get_gga_line()
+        except IOError:
+            return Point(-1, -1)
 
         if self.checksum(line):
             fields = self._name_fields(line)
@@ -45,7 +48,7 @@ class Gps(object):
             line = self._gpsSerial.readline(None).strip()
             if line.startswith('$GPGGA'):
                 return line
-        raise Exception('GPS didn\'t give a gga string in time')
+        raise IOError('GPS didn\'t give a gga string in time')
 
     def _parse_degrees(self, strDegrees):
         """
