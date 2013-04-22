@@ -79,7 +79,6 @@ int readWindSensor(){
   pulseLength = pulseIn(windSensorPin, HIGH, 2000);
   int magic = 29;
   windAngle =((pulseLength*10)/29); // 29 is the magic number where pulse time of 1036 = 359
-  setServo('R', (windAngle/2)); //Rudder Servo and Wind Sensor Test
   return (windAngle);
 }
 
