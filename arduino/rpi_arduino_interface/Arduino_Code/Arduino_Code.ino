@@ -12,8 +12,8 @@ char inData[6]; // Allocate some space for the string
 void setup() {
   Serial.begin(9600); //Begin at 9600
   //Use .attach for setting up connection to the servo
-  myRudderServo.attach(9, 500, 2000);
-  mySailServo.attach(10, 500, 1850);
+  myRudderServo.attach(10, 1000, 2000);
+  mySailServo.attach(9, 1000, 1850);
   myRudderServo.writeMicroseconds(1500);
   mySailServo.writeMicroseconds(1500);
   pinMode(11, INPUT);  //Use pinMode for setting up connection to wind sensor
