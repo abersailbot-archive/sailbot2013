@@ -41,10 +41,12 @@ void getData() {
 
 void setServo(char servoChar, int turnAmount){
   if('R' == servoChar){
+    turnAmount = constrain(turnAmount, 1000, 2000);
     myRudderServo.writeMicroseconds(turnAmount);
     //myRudderServo.writeMicroseconds(500);
   }
   else{
+    turnAmount = constrain(turnAmount, 1000, 1850);
     mySailServo.writeMicroseconds(turnAmount);
     //mySailServo.writeMicroseconds(500);
   }
