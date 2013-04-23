@@ -3,7 +3,9 @@ import serial
 
 class Xbee(object):
     """An xbee device"""
-    def __init__(self, serialPortName='/dev/ttyAMA0', baudRate=115200):
+    def __init__(self, serialPortName='/dev/ttyAMA0', baudRate=None):
+        if baudRate is None:
+            baudRate = config.xbeeBaudRate
         self._xbeeSerial = serial.Serial(config.xbeeSerialport, baudRate)
 
     def send(self, message):
