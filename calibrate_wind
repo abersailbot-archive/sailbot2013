@@ -1,0 +1,14 @@
+#!/usr/bin/env python
+from sailbot import arduino
+import time
+
+a = arduino.Arduino()
+print '''Calibrating wind sensor in \033[1;35m5 seconds\033[0m, hold the vane towards the bow'''
+for i in reversed(range(5)):
+    time.sleep(1)
+    print '   ', i
+if a.calibrate_wind_sensor():
+    print '[\033[1;32mOK\033[0m] Done!'
+else:
+    print '''[\033[1;31mERROR\033[0m] The arduino didn\'t give the correct output, wind sensor
+offset might not be saved'''

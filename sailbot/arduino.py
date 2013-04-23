@@ -42,6 +42,12 @@ class Arduino(object):
         """Set the sail servo to a value between 1000 and 1850"""
         return self.__sendCommand('s%03d' % angle)
 
+    def calibrate_wind_sensor(self):
+        """
+        Send a message to the arduino to save the offset of the wind sensor
+        """
+        return self.__sendCommand('o').startsWith('1')
+
 if __name__ == '__main__':
     import time
     a = Arduino() #create a test device on the arduino
