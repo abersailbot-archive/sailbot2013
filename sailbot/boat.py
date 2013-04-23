@@ -12,7 +12,7 @@ class Boat(object):
 
     def log(self, logfilename='logfile'):
         """Log the output of most of the sensors"""
-        l = 'Time: {time}, Heading: {head}, Wind: {wind}, Position: {pos}\n'.format(
+        l = 'time={time} bhead={head} wind={wind} lat={pos.lat} lon={pos.long}\n'.format(
                 time = int(time.time()),
                 head = self.arduino.get_compass(),
                 wind = self.arduino.get_wind(),
