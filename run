@@ -9,4 +9,4 @@ import time
 boat = sailbot.Boat()
 while True:
     boat.log()
-    time.sleep(10)
+    time.sleep(2)
