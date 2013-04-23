@@ -13,8 +13,9 @@ int DEBUG = 0;
 void setup() {
     Serial.begin(9600); //Begin at 9600
     //Use .attach for setting up connection to the servo
-    myRudderServo.attach(10, 1000, 2000);
-    mySailServo.attach(9, 1000, 1850);
+    myRudderServo.attach(10, 1000, 2000); // Attach, with the output limited
+                                          // between 1000 and 2000 ms
+    mySailServo.attach(9, 1000, 1850); // Same, but between 1000 and 1850 ms
     myRudderServo.writeMicroseconds(1500);
     mySailServo.writeMicroseconds(1500);
     pinMode(11, INPUT);  //Use pinMode for setting up connection to wind sensor
