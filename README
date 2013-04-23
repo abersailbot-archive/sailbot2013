@@ -2,3 +2,7 @@ Code for the aberystwyth student robotic boat.
 
 All of the code contained within (with the exception of pynmea) is licenced
 under the GPLv3. See COPYING for more details.
+
+To run the code (current code simply logs sensor data), execute
+
+    $ ./run
