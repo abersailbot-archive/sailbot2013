@@ -9,6 +9,7 @@ Servo mySailServo; // a maximum of eight servo objects can be created
 
 char inData[6]; // Allocate some space for the string
 int DEBUG = 0;
+int offSet = 0;
 
 void setup() {
     Serial.begin(9600); //Begin at 9600
@@ -21,7 +22,7 @@ void setup() {
     pinMode(11, INPUT);  //Use pinMode for setting up connection to wind sensor
     pinMode(12, OUTPUT);
     Wire.begin(); // Initialize the I2C bus for the compass
-
+    offSet = (EEPROM.read(0) << 8) + EEPROM.read(1);
     if (DEBUG) {
         Serial.write("Power On\n");
     }
@@ -84,16 +85,38 @@ int readWindSensor() {
     pulseLength = pulseIn(windSensorPin, HIGH, 2000);
     int magic = 29;
     windAngle =((pulseLength*10)/29); // 29 is the magic number where pulse time of 1036 = 359
+    windAngle = windAngle - offset//Compensate for offset
+    windAngle = mod(windAngle); // Wrap Arround
     return (windAngle);
+}
+
+int mod(int windAngle){
+    int newWindAngle;
+    if(windAngle < 0){
+        newWindAngle = windAngle + 360;
+    }
+    else if(windAngle >= 360){
+        newWindAngle = windAngle - 360;
+    }
+    else{
+        newWindAngle = windAngle;
+    }
+    return newWindAngle;
 }
 
 void loop() {
     getData();
     switch(inData[0]){
-        case 'c:
+        case 'c':
+            if (DEBUG) {
+              Serial.print("c");
+            }
             Serial.println(readCompass()); //Compass Read
             break;
         case 'w':
+            if (DEBUG) {
+              Serial.print("w");
+            }
             Serial.println(readWindSensor()); //Wind Sensor Read
             break;
         case 'r':
@@ -108,5 +131,20 @@ void loop() {
             }
             setServo('S', getAmount()); // Sail Set
             break;
+        case 'o':
+            if (DEBUG) {
+              Serial.println("o");
+            }
+            offset = readWindSensor();
+            byte byte1 = (byte)(offset >> 8);
+            byte byte2 = (byte)(offset << 8);
+            if (DEBUG) {
+              Serial.println("Offset: " + offset);
+              Serial.println("Byte1: " + byte1);
+              Serial.println("Byte2: " + byte2);
+            }
+            EEPROM.write(0, byte1);
+            EEPROM.write(1, byte2);
+            Serial.println(1);
     }
 }
