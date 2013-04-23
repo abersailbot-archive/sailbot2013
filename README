@@ -6,3 +6,9 @@ more details.
 To run the code (current code simply logs sensor data), execute
 
     $ ./run
+
+To calibrate the wind sensor, run
+
+    $ ./calibrate_wind
+
+and turn the vane on the sensor to face the bow.
