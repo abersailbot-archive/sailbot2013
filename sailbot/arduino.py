@@ -1,6 +1,7 @@
 import serial
 from threading import Lock
 import config
+import time
 
 class Arduino(object):
     """The arduino and basic communications with devices attached to it"""
@@ -14,6 +15,7 @@ class Arduino(object):
             self._lock = Lock()
         except Exception:
             raise Exception('Cannot connect to arduino on %s' % port)
+        time.sleep(2)
 
     def __sendCommand(self, c):
         """
