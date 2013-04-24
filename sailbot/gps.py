@@ -37,10 +37,9 @@ class Gps(object):
             if fields.id == 'GPGGA':
                 lat = self._parse_degrees(fields.lat)
                 long = self._parse_degrees(fields.long)
-		#print fields.lat_direction
-		#print fields.long_direction
-		#if fields.lat_direction == 'S':
-		#	lat=-lat
+		
+		if fields.lat_direction == 'S':
+			lat=-lat
 		if fields.long_direction == 'W':
 			long=-long
                 if lat is None:
