@@ -2,6 +2,7 @@ from arduino import Arduino
 from gps import Gps
 from xbee import Xbee
 import time
+import traceback
 
 class Boat(object):
     def __init__(self):
@@ -21,20 +22,21 @@ class Boat(object):
                     wind = self.arduino.get_wind(),
                     pos = self._gps.position()
                 )
-        except Exception, e:
-            print e
+
+            # write to log file
+            with open(logfilename, 'a') as f:
+                f.write(l)
+
+            # write to xbee
+            self._xbee.send(l)
+            
+            # write to console
+            print l
+
+        except:
+            trace = traceback.format_exc()
             with open('errors', 'a') as f:
-                f.write(str(time.time()) + ':\n' + str(e) + '\n')
-
-        # write to log file
-        with open(logfilename, 'a') as f:
-            f.write(l)
-
-        # write to xbee
-        self._xbee.send(l)
-		
-        # write to console
-        print l
+                f.write(str(time.time()) + ':\n' + trace + '\n')
 
 if __name__ == '__main__':
     b = Boat()
