@@ -24,7 +24,7 @@ class Boat(object):
         except Exception, e:
             print e
             with open('errors', 'a') as f:
-                f.write(str(time.time()) + ':\n' + e + '\n')
+                f.write(str(time.time()) + ':\n' + str(e) + '\n')
 
         # write to log file
         with open(logfilename, 'a') as f:
