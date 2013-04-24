@@ -1,3 +1,7 @@
+//DO NOT PUT ON ARDUINO BEFORE TEST ON THE 24TH, EEPROM IS YET TO BE TESTED
+
+
+
 #include <Servo.h> 
 #include <Wire.h>
 #include <EEPROM.h>
