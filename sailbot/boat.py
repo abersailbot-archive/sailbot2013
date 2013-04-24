@@ -2,6 +2,7 @@ from arduino import Arduino
 from gps import Gps
 from xbee import Xbee
 import time
+import traceback
 
 class Boat(object):
     def __init__(self):
@@ -32,10 +33,10 @@ class Boat(object):
             # write to console
             print l
 
-        except Exception, e:
-            print e
+        except:
+            trace = traceback.format_exc()
             with open('errors', 'a') as f:
-                f.write(str(time.time()) + ':\n' + str(e) + '\n')
+                f.write(str(time.time()) + ':\n' + trace + '\n')
 
 if __name__ == '__main__':
     b = Boat()
