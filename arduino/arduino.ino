@@ -1,5 +1,10 @@
+//DO NOT PUT ON ARDUINO BEFORE TEST ON THE 24TH, EEPROM IS YET TO BE TESTED
+
+
+
 #include <Servo.h> 
 #include <Wire.h>
+#include <EEPROM.h>
 
 #define HMC6343_ADDRESS 0x19
 #define HMC6343_HEADING_REG 0x50
@@ -9,7 +14,7 @@ Servo mySailServo; // a maximum of eight servo objects can be created
 
 char inData[6]; // Allocate some space for the string
 int DEBUG = 0;
-int offSet = 0;
+int offset = 0;
 
 void setup() {
     Serial.begin(9600); //Begin at 9600
@@ -22,7 +27,7 @@ void setup() {
     pinMode(11, INPUT);  //Use pinMode for setting up connection to wind sensor
     pinMode(12, OUTPUT);
     Wire.begin(); // Initialize the I2C bus for the compass
-    offSet = (EEPROM.read(0) << 8) + EEPROM.read(1);
+    offset = (EEPROM.read(0) << 8) + EEPROM.read(1);
     if (DEBUG) {
         Serial.write("Power On\n");
     }
@@ -85,7 +90,7 @@ int readWindSensor() {
     pulseLength = pulseIn(windSensorPin, HIGH, 2000);
     int magic = 29;
     windAngle =((pulseLength*10)/29); // 29 is the magic number where pulse time of 1036 = 359
-    windAngle = windAngle - offset//Compensate for offset
+    windAngle = windAngle - offset;//Compensate for offset
     windAngle = mod(windAngle); // Wrap Arround
     return (windAngle);
 }
