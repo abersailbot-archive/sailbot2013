@@ -46,20 +46,27 @@ class Boat(object):
         bearing = Bearing(self.arduino.get_compass())
         return wind + bearing
 
-    def set_sail_angle(targetAngle):
+    def set_sail_angle(self, targetAngle):
         upper = 1850
         lower = 1000
         maximumAngle = 70
-        ms = lower + (float(targetAngle)/maximumAngle) * (upper - lower)
+        ms = lower + (1-(float(targetAngle)/maximumAngle)) * (upper - lower)
+        print 'setting sail to', targetAngle, 'degrees and ', ms, 'ms'
         self.arduino.set_sail(ms)
 
 if __name__ == '__main__':
     b = Boat()
     time.sleep(1)
-    while True:
+    while False:
         b.arduino.set_rudder(1000)
         time.sleep(10)
         b.arduino.set_sail(1000)
         b.arduino.set_rudder(2000)
         time.sleep(10)
         b.arduino.set_sail(2000)
+    while True:
+        b.arduino.set_rudder(1500)
+        b.set_sail_angle(0)
+        time.sleep(10)
+        b.set_sail_angle(45)
+        time.sleep(10)
