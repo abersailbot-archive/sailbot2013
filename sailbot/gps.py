@@ -14,6 +14,7 @@ def _float_or_none(value):
     """Return None if the input value is empty, else return the value converted
     into a float"""
     if value:
+        print value
         return float(value)
     else:
         return None
@@ -27,6 +28,7 @@ class Gps(object):
         """Return a Point containing the current coordinates from the GPS"""
         try:
             line = self.get_gga_line()
+	    print line
         except IOError:
             return Point(-1, -1)
 

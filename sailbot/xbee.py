@@ -10,4 +10,4 @@ class Xbee(object):
 
     def send(self, message):
         """Send a message to the xbee"""
-        self._xbeeSerial.write(message + '\n')
+        self._xbeeSerial.write(message + '$')
