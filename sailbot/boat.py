@@ -14,12 +14,18 @@ class Boat(object):
         """
         Log the output of the sensors to stdout, a logfile and down the xbee
         """
-        l = 'time={time} bhead={head} wind={wind} lat={pos.lat} lon={pos.long}\n\r'.format(
-                time = int(time.time()),
-                head = self.arduino.get_compass(),
-                wind = self.arduino.get_wind(),
-                pos = self._gps.position()
-            )
+        try:
+            l = 'time={time} bhead={head} wind={wind} lat={pos.lat} lon={pos.long}\n\r'.format(
+                    time = int(time.time()),
+                    head = self.arduino.get_compass(),
+                    wind = self.arduino.get_wind(),
+                    pos = self._gps.position()
+                )
+        except Exception, e:
+            print e
+            with open('errors', 'a') as f:
+                f.write(str(time.time()) + ':\n' + e + '\n')
+
         # write to log file
         with open(logfilename, 'a') as f:
             f.write(l)
