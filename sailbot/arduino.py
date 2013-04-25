@@ -23,7 +23,6 @@ class Arduino(object):
         other threads interweaving requests by locking on self._lock
         """
         with self._lock:
-            print 'I sent "%s"' % c
             self.port.flushInput()
             self.port.write(c + '\n')
             return self.port.readline()
