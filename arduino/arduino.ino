@@ -12,7 +12,7 @@ Servo mySailServo; // a maximum of eight servo objects can be created
 
 char inData[6]; // Allocate some space for the string
 int DEBUG = 0;
-int EEPROMTEST = 0;
+int EEPROMTEST = 1;
 int offset = 0;
 
 void setup() {
@@ -23,16 +23,17 @@ void setup() {
   mySailServo.attach(9, 1000, 1850); // Same, but between 1000 and 1850 ms
   myRudderServo.writeMicroseconds(1500);
   mySailServo.writeMicroseconds(1500);
-  pinMode(11, INPUT);  //Use pinMode for setting up connection to wind sensor
+  pinMode(11, INPUT);    //Use pinMode for setting up connection to wind sensor
   pinMode(12, OUTPUT);
   Wire.begin(); // Initialize the I2C bus for the compass
-  if (EEPROMTEST){
-    byte lowByte = EEPROM.read(0);
-    byte highByte = EEPROM.read(1);
-    offset = ((lowByte << 0) & 0xFF) + ((highByte << 8) & 0xFF00);
-  }
+  byte lowByte = EEPROM.read(0);
+  byte highByte = EEPROM.read(1);
+  offset = ((lowByte << 0) & 0xFF) + ((highByte << 8) & 0xFF00);
   if (DEBUG) {
     Serial.write("Power On\n");
+    Serial.println(offset);
+    Serial.println(lowByte);
+    Serial.println(highByte);
   }
 }
 
@@ -141,22 +142,20 @@ void loop() {
     setServo('S', getAmount()); // Sail Set
     break;
   case 'o':
-    if(EEPROMTEST){
-      if (DEBUG) {
-        Serial.println("o");
-      }
-      offset = readWindSensor();
-      byte lowByte = ((offset >> 0) & 0xFF);
-      byte highByte = ((offset >> 8) & 0xFF);
-      if (DEBUG) {
-        Serial.println("Offset: " + offset);
-        Serial.println("Byte1: " + lowByte);
-        Serial.println("Byte2: " + lowByte);
-      }
-      EEPROM.write(0, lowByte);
-      EEPROM.write(1, highByte);
-      Serial.println(1);
+    offset = 0;
+    if (DEBUG) {
+      Serial.println("o");
     }
+    offset = readWindSensor();
+    byte lowByte = ((offset >> 0) & 0xFF);
+    byte highByte = ((offset >> 8) & 0xFF);
+    if (DEBUG) {
+      Serial.println(offset);
+      Serial.println(lowByte);
+      Serial.println(highByte);
+    }
+    EEPROM.write(0, lowByte);
+    EEPROM.write(1, highByte);
+    Serial.println(1);
   }
 }
-
