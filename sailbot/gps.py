@@ -14,7 +14,10 @@ def _float_or_none(value):
     """Return None if the input value is empty, else return the value converted
     into a float"""
     if value:
-        return float(value)
+        try:
+            return float(value)
+        except ValueError:
+            return None
     else:
         return None
 
