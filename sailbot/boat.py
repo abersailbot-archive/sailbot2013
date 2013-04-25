@@ -14,7 +14,7 @@ class Boat(object):
         """
         Log the output of the sensors to stdout, a logfile and down the xbee
         """
-        l = 'time={time} bhead={head} wind={wind} lat={pos.lat} lon={pos.long}\n'.format(
+        l = 'time={time} bhead={head} wind={wind} lat={pos.lat} lon={pos.long}\n\r'.format(
                 time = int(time.time()),
                 head = self.arduino.get_compass(),
                 wind = self.arduino.get_wind(),
@@ -26,7 +26,7 @@ class Boat(object):
 
         # write to xbee
         self._xbee.send(l)
-
+		
         # write to console
         print l
 

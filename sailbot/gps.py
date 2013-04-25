@@ -30,6 +30,7 @@ class Gps(object):
         """Return a Point containing the current coordinates from the GPS"""
         try:
             line = self.get_gga_line()
+	    print line
         except IOError:
             return Point(-1, -1)
 
@@ -38,6 +39,11 @@ class Gps(object):
             if fields.id == 'GPGGA':
                 lat = self._parse_degrees(fields.lat)
                 long = self._parse_degrees(fields.long)
+		
+		if fields.lat_direction == 'S':
+			lat=-lat
+		if fields.long_direction == 'W':
+			long=-long
                 if lat is None:
                     lat = -1
                 if long is None:

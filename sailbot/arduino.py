@@ -23,7 +23,6 @@ class Arduino(object):
         other threads interweaving requests by locking on self._lock
         """
         with self._lock:
-            print 'I sent "%s"' % c
             self.port.flushInput()
             self.port.write(c + '\n')
             return self.port.readline()
@@ -48,7 +47,7 @@ class Arduino(object):
         """
         Send a message to the arduino to save the offset of the wind sensor
         """
-        return self.__sendCommand('o').startsWith('1')
+        return self.__sendCommand('o').startswith('1')
 
 if __name__ == '__main__':
     import time
