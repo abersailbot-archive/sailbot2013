@@ -27,7 +27,9 @@ void setup() {
     pinMode(11, INPUT);  //Use pinMode for setting up connection to wind sensor
     pinMode(12, OUTPUT);
     Wire.begin(); // Initialize the I2C bus for the compass
-    offset = (EEPROM.read(0) << 8) + EEPROM.read(1);
+    byte lowByte = EEPROM.read(0);
+    byte highByte = EEPROM.read(1);
+    offset = ((lowByte << 0) & 0xFF) + ((highByte << 8) & 0xFF00);
     if (DEBUG) {
         Serial.write("Power On\n");
     }
@@ -136,20 +138,23 @@ void loop() {
             }
             setServo('S', getAmount()); // Sail Set
             break;
-        case 'o':
+       /* case 'o':
             if (DEBUG) {
               Serial.println("o");
             }
             offset = readWindSensor();
-            byte byte1 = (byte)(offset >> 8);
-            byte byte2 = (byte)(offset << 8);
+            byte lowByte = ((p_value >> 0) & 0xFF);
+            byte highByte = ((p_value >> 8) & 0xFF);
+
+      
             if (DEBUG) {
               Serial.println("Offset: " + offset);
               Serial.println("Byte1: " + byte1);
               Serial.println("Byte2: " + byte2);
             }
-            EEPROM.write(0, byte1);
-            EEPROM.write(1, byte2);
+            EEPROM.write(0, lowByte);
+            EEPROM.write(1, highByte);
             Serial.println(1);
+            */
     }
 }
