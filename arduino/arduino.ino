@@ -12,7 +12,6 @@ Servo mySailServo; // a maximum of eight servo objects can be created
 
 char inData[6]; // Allocate some space for the string
 int DEBUG = 0;
-int EEPROMTEST = 1;
 int offset = 0;
 
 void setup() {
