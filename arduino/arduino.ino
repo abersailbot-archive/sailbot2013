@@ -150,8 +150,8 @@ void loop() {
       byte highByte = ((offset >> 8) & 0xFF);
       if (DEBUG) {
         Serial.println("Offset: " + offset);
-        Serial.println("Byte1: " + byte1);
-        Serial.println("Byte2: " + byte2);
+        Serial.println("Byte1: " + lowByte);
+        Serial.println("Byte2: " + lowByte);
       }
       EEPROM.write(0, lowByte);
       EEPROM.write(1, highByte);
