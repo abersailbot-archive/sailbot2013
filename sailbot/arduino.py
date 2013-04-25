@@ -48,7 +48,7 @@ class Arduino(object):
         """
         Send a message to the arduino to save the offset of the wind sensor
         """
-        return self.__sendCommand('o').startsWith('1')
+        return self.__sendCommand('o').startswith('1')
 
 if __name__ == '__main__':
     import time
