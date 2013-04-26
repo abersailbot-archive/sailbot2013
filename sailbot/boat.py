@@ -1,6 +1,8 @@
 from arduino import Arduino
+from bearing import Bearing
 from gps import Gps
 from xbee import Xbee
+
 import time
 import traceback
 
@@ -37,6 +39,11 @@ class Boat(object):
             trace = traceback.format_exc()
             with open('errors', 'a') as f:
                 f.write(str(time.time()) + ':\n' + trace + '\n')
+
+    def get_wind_bearing(self):
+        wind = Bearing(self.arduino.get_wind())
+        bearing = Bearing(self.arduino.get_compass())
+        return wind + bearing
 
 if __name__ == '__main__':
     b = Boat()
