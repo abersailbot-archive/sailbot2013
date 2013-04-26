@@ -11,8 +11,11 @@ Servo myRudderServo; // create servo object to control a servo
 Servo mySailServo; // a maximum of eight servo objects can be created 
 
 char inData[6]; // Allocate some space for the string
-int DEBUG = 0;
+
 int offset = 0;
+
+int DEBUG = 0;
+
 
 void setup() {
   Serial.begin(9600); //Begin at 9600
@@ -83,7 +86,8 @@ int readCompass() {
   highByte = Wire.read(); // Reads in the bytes and convert them into proper degree units.
   lowByte = Wire.read();
   float heading = ((highByte << 8) + lowByte) / 10.0; // the heading in degrees
-
+  heading = heading + 90;
+  heading = mod(heading);
   return (int)heading; // Print the sensor readings to the serial port.
 }
 
@@ -99,18 +103,32 @@ int readWindSensor() {
   return (windAngle);
 }
 
-int mod(int windAngle){
-  int newWindAngle;
-  if(windAngle < 0){
-    newWindAngle = windAngle + 360;
+int mod(int value){
+  int newValue;
+  if(value < 0){
+    newValue = value + 360;
   }
-  else if(windAngle >= 360){
-    newWindAngle = windAngle - 360;
+  else if(value >= 360){
+    newValue = value - 360;
   }
   else{
-    newWindAngle = windAngle;
+    newValue = value;
   }
-  return newWindAngle;
+  return newValue;
+}
+
+float mod(float value){
+  float newValue;
+  if(value < 0){
+    newValue = value + 360;
+  }
+  else if(value >= 360){
+    newValue = value - 360;
+  }
+  else{
+    newValue = value;
+  }
+  return newValue;
 }
 
 void loop() {
