@@ -28,7 +28,7 @@ class Arduino(object):
             return self.port.readline()
 
     def get_wind(self):
-        """Get the angle from the wind sensor """
+        """Get the angle from the wind sensor relative to the boat"""
         return int(self.__sendCommand('w'))
 
     def get_compass(self):
