@@ -30,3 +30,6 @@ class Bearing(object):
 
     def __str__(self):
         return '{0:0.2f} degrees clockwise from north'.format(self.degrees)
+
+    def __int__(self):
+        return int(self._degrees)
