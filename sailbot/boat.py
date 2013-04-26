@@ -41,6 +41,7 @@ class Boat(object):
                 f.write(str(time.time()) + ':\n' + trace + '\n')
 
     def get_wind_bearing(self):
+        """Return the absolute bearing of the wind"""
         wind = Bearing(self.arduino.get_wind())
         bearing = Bearing(self.arduino.get_compass())
         return wind + bearing
