@@ -1,5 +1,3 @@
-//DO NOT PUT ON ARDUINO BEFORE TEST ON THE 25TH, EEPROM IS YET TO BE TESTED
-
 #include <Servo.h> 
 #include <Wire.h>
 #include <EEPROM.h>
@@ -11,11 +9,9 @@ Servo myRudderServo; // create servo object to control a servo
 Servo mySailServo; // a maximum of eight servo objects can be created 
 
 char inData[6]; // Allocate some space for the string
-
 int offset = 0;
 
 int DEBUG = 0;
-
 
 void setup() {
   Serial.begin(9600); //Begin at 9600
@@ -159,7 +155,7 @@ void loop() {
     setServo('S', getAmount()); // Sail Set
     break;
   case 'o':
-    offset = 0;
+    offset = 0; //Set OffSet for the Wind Sensor
     if (DEBUG) {
       Serial.println("o");
     }
