@@ -27,14 +27,12 @@ def get_event(s):
                 return events[e]()
 
 while True:
-    print >>sys.stderr, 'waiting for a connection'
     connection, client_address = sock.accept()
     try:
         while True:
             data = connection.recv(32)
             print >>sys.stderr, 'received "%s"' % data
             if data:
-                print >>sys.stderr, 'sending data back to the client'
                 connection.sendall(str(get_event(data)))
             else:
                 break
