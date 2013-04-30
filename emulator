@@ -16,8 +16,8 @@ sock.listen(1)
 events = {
         'get compass': boat.arduino.get_compass(),
         'get wind_dir': boat.arduino.get_wind(),
-        'get northing': boat.gps.lat(),
-        'get easting': boat.gps.long(),
+        'get northing': boat.gps.position.long(),
+        'get easting': boat.gps.position.lat(),
         'set rudder': lambda arg: boat.arduino.set_rudder(arg),
         'set sail': lambda arg: boat.arduino.set_sail(arg)
     }
