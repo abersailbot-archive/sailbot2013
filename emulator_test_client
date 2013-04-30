@@ -7,17 +7,18 @@ sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server_address = ('localhost', 10006)
 print >>sys.stderr, 'connecting to %s port %s' % server_address
 sock.connect(server_address)
-try:
-    message = 'get compass'
-    print >>sys.stderr, 'sending "%s"' % message
-    sock.sendall(message)
-    amount_received = 0
-    amount_expected = len(message)
-    
-    data = sock.recv(32)
-    amount_received += len(data)
-    print >>sys.stderr, 'received "%s"' % data
+while True:
+    try:
+        message = raw_input('command: ')
+        print >>sys.stderr, '    sending "%s"' % message
+        sock.sendall(message)
+        amount_received = 0
+        amount_expected = len(message)
+        
+        data = sock.recv(32)
+        amount_received += len(data)
+        print >>sys.stderr, '    received "%s"' % data
 
-finally:
-    print >>sys.stderr, 'closing socket'
-    sock.close()
+    finally:
+        print >>sys.stderr, 'closing socket'
+        sock.close()
