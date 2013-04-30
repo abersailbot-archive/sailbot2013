@@ -31,8 +31,7 @@ def get_event(s):
                 print 'setting to', arg
                 return events[e](int(arg))
             else:
-                print 'returning', e
-                return events[e]()
+                return events[e]
 
 while True:
     connection, client_address = sock.accept()
