@@ -2,6 +2,9 @@
 import socket
 import sys
 import re
+from sailbot import Boat
+
+boat = Boat()
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server_address = ('localhost', 10006)
@@ -9,10 +12,15 @@ print >>sys.stderr, 'starting up on %s port %s' % server_address
 sock.bind(server_address)
 sock.listen(1)
 
+
 events = {
-        'get compass': (lambda: 180),
-        'set compass': (lambda x: x*90)
-        }
+        'get compass': boat.arduino.get_compass(),
+        'get wind_dir': boat.arduino.get_wind(),
+        'get northing': boat.gps.lat(),
+        'get easting': boat.gps.long(),
+        'set rudder': lambda arg: boat.arduino.set_rudder(arg),
+        'set sail': lambda arg: boat.arduino.set_sail(arg)
+    }
 
 def get_event(s):
     for e in events:
@@ -36,6 +44,5 @@ while True:
                 connection.sendall(str(get_event(data)))
             else:
                 break
-            
     finally:
         connection.close()
