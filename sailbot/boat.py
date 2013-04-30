@@ -22,7 +22,7 @@ class Boat(object):
                     time = int(time.time()),
                     head = self.arduino.get_compass(),
                     wind = self.arduino.get_wind(),
-                    pos = self.gps.position()
+                    pos = self.gps.position
                 )
 
             # write to log file
