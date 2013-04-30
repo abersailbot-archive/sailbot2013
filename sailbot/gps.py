@@ -26,6 +26,7 @@ class Gps(object):
     def __init__(self):
         self._gpsSerial = serial.Serial(config.gpsSerialport, 4800, timeout=0.5)
 
+    @property
     def position(self):
         """Return a Point containing the current coordinates from the GPS"""
         try:
@@ -41,9 +42,9 @@ class Gps(object):
                 long = self._parse_degrees(fields.long)
 		
 		if fields.lat_direction == 'S':
-			lat=-lat
+			lat = -lat
 		if fields.long_direction == 'W':
-			long=-long
+			long = -long
                 if lat is None:
                     lat = -1
                 if long is None:
