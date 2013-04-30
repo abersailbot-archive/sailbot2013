@@ -50,7 +50,7 @@ class Gps(object):
                     long = -1
                 return Point(lat, long)
         else:
-            raise ValueError('Checksum failed')
+            raise ValueError('Checksum failed on "{}"'.format(line))
 
     def get_gga_line(self, attempts=10):
         for i in range(attempts):
