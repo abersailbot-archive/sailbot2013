@@ -10,7 +10,7 @@ class Boat(object):
     def __init__(self):
         """Constructor for the boat object"""
         self.arduino = Arduino()
-        self._gps = Gps()
+        self.gps = Gps()
         self._xbee = Xbee()
 
     def log(self, logfilename='logfile'):
@@ -22,7 +22,7 @@ class Boat(object):
                     time = int(time.time()),
                     head = self.arduino.get_compass(),
                     wind = self.arduino.get_wind(),
-                    pos = self._gps.position()
+                    pos = self.gps.position()
                 )
 
             # write to log file
@@ -32,7 +32,7 @@ class Boat(object):
             # write to xbee
             self._xbee.send(l)
             
-            # write to console
+           # write to console
             print l
 
         except:
