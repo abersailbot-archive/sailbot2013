@@ -8,16 +8,14 @@ boat = Boat()
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server_address = ('localhost', 10006)
-print >>sys.stderr, 'starting up on %s port %s' % server_address
 sock.bind(server_address)
-sock.listen(1)
-
+print >>sys.stderr, 'starting up on %s port %s' % server_address
 
 events = {
-        'get compass': boat.arduino.get_compass(),
-        'get wind_dir': boat.arduino.get_wind(),
-        'get northing': boat.gps.position.long,
-        'get easting': boat.gps.position.lat,
+        'get compass': boat.arduino.get_compass,
+        'get wind_dir': boat.arduino.get_wind,
+        'get northing': lambda: boat.gps.position.long,
+        'get easting': lambda: boat.gps.position.lat,
         'set rudder': lambda arg: boat.arduino.set_rudder(arg),
         'set sail': lambda arg: boat.arduino.set_sail(arg)
     }
@@ -31,9 +29,11 @@ def get_event(s):
                 print 'setting to', arg
                 return events[e](int(arg))
             else:
-                return events[e]
+                return events[e]()
 
 while True:
+    sock.listen(1)
+
     connection, client_address = sock.accept()
     try:
         while True:
