@@ -1,0 +1,47 @@
+#!/usr/bin/env python
+import socket
+import sys
+import re
+from sailbot import Boat
+
+boat = Boat()
+
+sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+server_address = ('localhost', 10006)
+print >>sys.stderr, 'starting up on %s port %s' % server_address
+sock.bind(server_address)
+sock.listen(1)
+
+
+events = {
+        'get compass': boat.arduino.get_compass(),
+        'get wind_dir': boat.arduino.get_wind(),
+        'get northing': boat.gps.position.long,
+        'get easting': boat.gps.position.lat,
+        'set rudder': lambda arg: boat.arduino.set_rudder(arg),
+        'set sail': lambda arg: boat.arduino.set_sail(arg)
+    }
+
+def get_event(s):
+    for e in events:
+        match = re.match(e, s)
+        if match:
+            if s.startswith('set'):
+                arg = s.split()[-1]
+                print 'setting to', arg
+                return events[e](int(arg))
+            else:
+                return events[e]
+
+while True:
+    connection, client_address = sock.accept()
+    try:
+        while True:
+            data = connection.recv(32)
+            print >>sys.stderr, 'received "%s"' % data
+            if data:
+                connection.sendall(str(get_event(data)))
+            else:
+                break
+    finally:
+        connection.close()
