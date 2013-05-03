@@ -27,6 +27,9 @@ class Gps(object):
     def __init__(self):
         self._gpsSerial = serial.Serial(config.gpsSerialport, 
                                         4800,
+                                        parity=serial.PARITY_NONE,
+                                        bytesize=serial.EIGHTBITS,
+                                        stopbits=serial.STOPBITS_ONE,
                                         timeout=0.5)
         time.sleep(0.25)
         for c in [
