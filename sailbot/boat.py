@@ -49,7 +49,7 @@ class Boat(object):
     def set_sail_angle(targetAngle):
         upper = 1850
         lower = 1000
-        maximumAngle = 90
+        maximumAngle = 70
         ms = lower + (float(targetAngle)/maximumAngle) * (upper - lower)
         self.arduino.set_sail(ms)
 
