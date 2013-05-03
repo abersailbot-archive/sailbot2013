@@ -25,21 +25,27 @@ def _float_or_none(value):
 class Gps(object):
     """A GPS receiver"""
     def __init__(self):
-        self._gpsSerial = serial.Serial(config.gpsSerialport, 4800, timeout=0.5)
+        self._gpsSerial = serial.Serial(config.gpsSerialport, 
+                                        4800,
+                                        timeout=0.5)
         time.sleep(0.25)
-        (self._send_command(c) for c in [
+        for c in [
                 '$PSRF103,05,00,00,01*21',
                 '$PSRF103,04,00,00,01*20',
                 '$PSRF103,03,00,00,01*27',
                 '$PSRF103,02,00,00,01*26',
                 '$PSRF103,01,00,00,01*25',
-                '$PSRF103,00,00,00,01*24'])
+                '$PSRF103,00,00,00,01*24']:
+            self._send_command(c)
+            time.sleep(0.25)
         time.sleep(0.25)
         self._gpsSerial.flushInput()
         self._gpsSerial.flushOutput()
+        time.sleep(0.5)
 
     def _send_command(self, command):
-        self._gpsSerial.write(command + '\n')
+        print 'sending:', command + '\n'
+        self._gpsSerial.write(command)
 
     @property
     def position(self):
@@ -70,7 +76,9 @@ class Gps(object):
 
     def get_gga_line(self):
         self._gpsSerial.flushInput()
+        self._gpsSerial.flushOutput()
         self._gpsSerial.write('$PSRF103,00,01,00,01*25\n')
+        time.sleep(0.5)
         return self._gpsSerial.readline(None).strip()
 
     def _parse_degrees(self, strDegrees):
