@@ -26,7 +26,7 @@ class Gps(object):
     """A GPS receiver"""
     def __init__(self):
         self._gpsSerial = serial.Serial(config.gpsSerialport, 4800, timeout=0.5)
-        time.sleep(0.5)
+        time.sleep(0.25)
         (self._send_command(c) for c in [
                 '$PSRF103,05,00,00,01*21',
                 '$PSRF103,04,00,00,01*20',
@@ -34,6 +34,9 @@ class Gps(object):
                 '$PSRF103,02,00,00,01*26',
                 '$PSRF103,01,00,00,01*25',
                 '$PSRF103,00,00,00,01*24'])
+        time.sleep(0.25)
+        self._gpsSerial.flushInput()
+        self._gpsSerial.flushOutput()
 
     def _send_command(self, command):
         self._gpsSerial.write(command + '\n')
