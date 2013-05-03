@@ -1,6 +1,7 @@
 from point import Point
 import config
 import serial
+import time
 
 class AttributeDict(dict):
     """Access elements of the dict as attributes"""
@@ -25,6 +26,17 @@ class Gps(object):
     """A GPS receiver"""
     def __init__(self):
         self._gpsSerial = serial.Serial(config.gpsSerialport, 4800, timeout=0.5)
+        time.sleep(0.5)
+        (self._send_command(c) for c in [
+                '$PSRF103,05,00,00,01*21',
+                '$PSRF103,04,00,00,01*20',
+                '$PSRF103,03,00,00,01*27',
+                '$PSRF103,02,00,00,01*26',
+                '$PSRF103,01,00,00,01*25',
+                '$PSRF103,00,00,00,01*24'])
+
+    def _send_command(self, command):
+        self._gpsSerial.write(command + '\n')
 
     @property
     def position(self):
@@ -53,12 +65,10 @@ class Gps(object):
         else:
             raise ValueError('Checksum failed on "{}"'.format(line))
 
-    def get_gga_line(self, attempts=10):
-        for i in range(attempts):
-            line = self._gpsSerial.readline(None).strip()
-            if line.startswith('$GPGGA'):
-                return line
-        raise IOError('GPS didn\'t give a gga string in time')
+    def get_gga_line(self):
+        self._gpsSerial.flushInput()
+        self._gpsSerial.write('$PSRF103,00,01,00,01*25\n')
+        return self._gpsSerial.readline(None).strip()
 
     def _parse_degrees(self, strDegrees):
         """
@@ -104,4 +114,4 @@ class Gps(object):
 
 if __name__ == '__main__':
     gps = Gps()
-    print gps.position()
+    print gps.position
