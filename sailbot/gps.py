@@ -47,8 +47,8 @@ class Gps(object):
         time.sleep(0.5)
 
     def _send_command(self, command):
-        print 'sending:', command + '\n'
-        self._gpsSerial.write(command)
+        print 'sending:', command + '\r\n'
+        self._gpsSerial.write(command + '\r\n')
 
     @property
     def position(self):
