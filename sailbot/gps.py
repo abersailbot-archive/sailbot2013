@@ -65,10 +65,10 @@ class Gps(object):
                 lat = self._parse_degrees(fields.lat)
                 long = self._parse_degrees(fields.long)
 		
-		if fields.lat_direction == 'S':
-			lat = -lat
-		if fields.long_direction == 'W':
-			long = -long
+                if fields.lat_direction == 'S':
+                    lat = -lat
+                if fields.long_direction == 'W':
+                    long = -long
                 if lat is None:
                     lat = -1
                 if long is None:
@@ -82,6 +82,13 @@ class Gps(object):
         self._gpsSerial.flushOutput()
         self._gpsSerial.write('$PSRF103,00,01,00,01*25\n')
         time.sleep(0.5)
+        return self._gpsSerial.readline(None).strip()
+
+    def get_rmc_line(self):
+        self._gpsSerial.flushInput()
+        self._gpsSerial.flushOutput()
+        self._gpsSerial.write('$PSRF103,04,01,00,01*21\r\n')
+        time.sleep(0.2)
         return self._gpsSerial.readline(None).strip()
 
     def _parse_degrees(self, strDegrees):
