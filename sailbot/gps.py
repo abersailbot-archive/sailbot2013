@@ -77,19 +77,18 @@ class Gps(object):
         else:
             raise ValueError('Checksum failed on "{}"'.format(line))
 
-    def get_gga_line(self):
+    def _get_line(self, getCommand):
         self._gpsSerial.flushInput()
         self._gpsSerial.flushOutput()
-        self._gpsSerial.write('$PSRF103,00,01,00,01*25\n')
+        self._gpsSerial.write(getCommand)
         time.sleep(0.5)
         return self._gpsSerial.readline(None).strip()
 
+    def get_gga_line(self):
+        return self._get_line('$PSRF103,00,01,00,01*25\r\n')
+
     def get_rmc_line(self):
-        self._gpsSerial.flushInput()
-        self._gpsSerial.flushOutput()
-        self._gpsSerial.write('$PSRF103,04,01,00,01*21\r\n')
-        time.sleep(0.2)
-        return self._gpsSerial.readline(None).strip()
+        return self._get_line('$PSRF103,04,01,00,01*21\r\n')
 
     def _parse_degrees(self, strDegrees):
         """
