@@ -28,6 +28,11 @@ class Waypoints(object):
         self._currentWaypoint = min(self._currentWaypoint + 1,
                                     len(self._points) - 1)
 
+    @property
+    def waypointNumber(self):
+        """Return the number of the current target waypoint"""
+        return self._currentWaypoint
+
 if __name__ == '__main__':
     w = Waypoints()
     w.add_point(Point(52.42459, -4.08339))
