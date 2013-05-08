@@ -43,7 +43,10 @@ while True:
             data = connection.recv(32)
             print >>sys.stderr, 'received "%s"' % data
             if data:
-                connection.sendall(str(get_event(data)))
+        msg = str(get_event(data))
+                connection.sendall(msg)
+        connection.sendall('$')
+        print "Sent : " + msg
             else:
                 break
     finally:
