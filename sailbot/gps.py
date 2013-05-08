@@ -31,7 +31,7 @@ class Gps(object):
                                         bytesize=serial.EIGHTBITS,
                                         stopbits=serial.STOPBITS_ONE,
                                         timeout=0.5)
-        time.sleep(0.25)
+        time.sleep(0.1)
         for c in [
                 '$PSRF103,05,00,00,01*21',
                 '$PSRF103,04,00,00,01*20',
@@ -40,11 +40,11 @@ class Gps(object):
                 '$PSRF103,01,00,00,01*25',
                 '$PSRF103,00,00,00,01*24']:
             self._send_command(c)
-            time.sleep(0.25)
-        time.sleep(0.25)
+            time.sleep(0.1)
+        time.sleep(0.1)
         self._gpsSerial.flushInput()
         self._gpsSerial.flushOutput()
-        time.sleep(0.5)
+        time.sleep(0.25)
 
     def _send_command(self, command):
         print 'sending:', command + '\r\n'
@@ -81,7 +81,7 @@ class Gps(object):
         self._gpsSerial.flushInput()
         self._gpsSerial.flushOutput()
         self._gpsSerial.write(getCommand)
-        time.sleep(0.5)
+        time.sleep(0.1)
         return self._gpsSerial.readline(None).strip()
 
     def get_gga_line(self):
