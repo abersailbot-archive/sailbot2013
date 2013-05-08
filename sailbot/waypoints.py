@@ -23,8 +23,21 @@ class Waypoints(object):
         """Return the bearing to the nextwaypoint"""
         return self.currentLoc.bearing_to(self.next)
 
+    def set_next(self):
+        """Assign the next waypoint to the subsequent point in the list"""
+        self._currentWaypoint = min(self._currentWaypoint + 1,
+                                    len(self._points) - 1)
+
 if __name__ == '__main__':
     w = Waypoints()
     w.add_point(Point(52.42459, -4.08339))
+    w.add_point(Point(52.42459, -3.08339))
+    w.add_point(Point(53.42459, -3.08339))
+    print w.distance()
+    print w.bearing()
+    w.set_next()
+    print w.distance()
+    print w.bearing()
+    w.set_next()
     print w.distance()
     print w.bearing()
