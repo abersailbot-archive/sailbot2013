@@ -18,7 +18,7 @@ void setup() {
   //Use .attach for setting up connection to the servo
   myRudderServo.attach(10, 1060, 1920); // Attach, with the output limited
   // between 1000 and 2000 ms
-  mySailServo.attach(9, 1000, 1850); // Same, but between 1000 and 1850 ms
+  mySailServo.attach(9, 1050, 1930); // Same, but between 1000 and 1850 ms
   myRudderServo.writeMicroseconds(1500);
   mySailServo.writeMicroseconds(1500);
   pinMode(11, INPUT);    //Use pinMode for setting up connection to wind sensor
@@ -57,7 +57,7 @@ void setServo(char servoChar, int turnAmount){
     myRudderServo.writeMicroseconds(turnAmount);
   }
   else {
-    turnAmount = constrain(turnAmount, 1000, 1850);
+    turnAmount = constrain(turnAmount, 1050, 1930);
     mySailServo.writeMicroseconds(turnAmount);
   }
 }
