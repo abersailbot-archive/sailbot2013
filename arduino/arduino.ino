@@ -16,7 +16,7 @@ int DEBUG = 0;
 void setup() {
   Serial.begin(9600); //Begin at 9600
   //Use .attach for setting up connection to the servo
-  myRudderServo.attach(10, 1000, 2000); // Attach, with the output limited
+  myRudderServo.attach(10, 1060, 1920); // Attach, with the output limited
   // between 1000 and 2000 ms
   mySailServo.attach(9, 1000, 1850); // Same, but between 1000 and 1850 ms
   myRudderServo.writeMicroseconds(1500);
@@ -53,7 +53,7 @@ void getData() {
 
 void setServo(char servoChar, int turnAmount){
   if('R' == servoChar) {
-    turnAmount = constrain(turnAmount, 1000, 2000);
+    turnAmount = constrain(turnAmount, 1060, 1920);
     myRudderServo.writeMicroseconds(turnAmount);
   }
   else {
