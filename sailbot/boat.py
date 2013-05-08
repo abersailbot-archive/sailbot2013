@@ -2,6 +2,7 @@ from arduino import Arduino
 from bearing import Bearing
 from gps import Gps
 from xbee import Xbee
+from waypoints import Waypoints
 
 import time
 import traceback
@@ -11,6 +12,7 @@ class Boat(object):
         """Constructor for the boat object"""
         self.arduino = Arduino()
         self.gps = Gps()
+        self.waypoints = Waypoints(self.gps)
         self._xbee = Xbee()
 
     def log(self, logfilename='logfile'):

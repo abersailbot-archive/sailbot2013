@@ -1,10 +1,10 @@
 from point import Point
 
 class Waypoints(object):
-    def __init__(self, points=None):
+    def __init__(self, gps, points=None):
         self._points = points if points is not None else []
         self._currentWaypoint = 0
-        self.currentLoc = Point(52.41389, -4.09098)
+        self._gps = gps
 
     def add_point(self, point):
         """Add a waypoint to the end of the current list of waypoints"""
@@ -17,11 +17,11 @@ class Waypoints(object):
 
     def distance(self):
         """Return the distance to the next waypoint in meters"""
-        return self.currentLoc.distance_to(self.next)
+        return self.gps.position.distance_to(self.next)
 
     def bearing(self):
         """Return the bearing to the nextwaypoint"""
-        return self.currentLoc.bearing_to(self.next)
+        return self.gps.position.bearing_to(self.next)
 
     def set_next(self):
         """Assign the next waypoint to the subsequent point in the list"""
