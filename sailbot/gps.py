@@ -1,6 +1,7 @@
 from point import Point
 import config
 import serial
+import time
 
 class AttributeDict(dict):
     """Access elements of the dict as attributes"""
@@ -24,14 +25,37 @@ def _float_or_none(value):
 class Gps(object):
     """A GPS receiver"""
     def __init__(self):
-        self._gpsSerial = serial.Serial(config.gpsSerialport, 4800, timeout=0.5)
+        self._gpsSerial = serial.Serial(config.gpsSerialport, 
+                                        4800,
+                                        parity=serial.PARITY_NONE,
+                                        bytesize=serial.EIGHTBITS,
+                                        stopbits=serial.STOPBITS_ONE,
+                                        timeout=0.5)
+        time.sleep(0.25)
+        for c in [
+                '$PSRF103,05,00,00,01*21',
+                '$PSRF103,04,00,00,01*20',
+                '$PSRF103,03,00,00,01*27',
+                '$PSRF103,02,00,00,01*26',
+                '$PSRF103,01,00,00,01*25',
+                '$PSRF103,00,00,00,01*24']:
+            self._send_command(c)
+            time.sleep(0.25)
+        time.sleep(0.25)
+        self._gpsSerial.flushInput()
+        self._gpsSerial.flushOutput()
+        time.sleep(0.5)
+
+    def _send_command(self, command):
+        print 'sending:', command + '\r\n'
+        self._gpsSerial.write(command + '\r\n')
 
     @property
     def position(self):
         """Return a Point containing the current coordinates from the GPS"""
         try:
             line = self.get_gga_line()
-	    print line
+            print line
         except IOError:
             return Point(-1, -1)
 
@@ -40,11 +64,11 @@ class Gps(object):
             if fields.id == 'GPGGA':
                 lat = self._parse_degrees(fields.lat)
                 long = self._parse_degrees(fields.long)
-		
-		if fields.lat_direction == 'S':
-			lat = -lat
-		if fields.long_direction == 'W':
-			long = -long
+
+                if fields.lat_direction == 'S':
+                    lat = -lat
+                if fields.long_direction == 'W':
+                    long = -long
                 if lat is None:
                     lat = -1
                 if long is None:
@@ -53,12 +77,18 @@ class Gps(object):
         else:
             raise ValueError('Checksum failed on "{}"'.format(line))
 
-    def get_gga_line(self, attempts=10):
-        for i in range(attempts):
-            line = self._gpsSerial.readline(None).strip()
-            if line.startswith('$GPGGA'):
-                return line
-        raise IOError('GPS didn\'t give a gga string in time')
+    def _get_line(self, getCommand):
+        self._gpsSerial.flushInput()
+        self._gpsSerial.flushOutput()
+        self._gpsSerial.write(getCommand)
+        time.sleep(0.5)
+        return self._gpsSerial.readline(None).strip()
+
+    def get_gga_line(self):
+        return self._get_line('$PSRF103,00,01,00,01*25\r\n')
+
+    def get_rmc_line(self):
+        return self._get_line('$PSRF103,04,01,00,01*21\r\n')
 
     def _parse_degrees(self, strDegrees):
         """
@@ -104,4 +134,4 @@ class Gps(object):
 
 if __name__ == '__main__':
     gps = Gps()
-    print gps.position()
+    print gps.position
