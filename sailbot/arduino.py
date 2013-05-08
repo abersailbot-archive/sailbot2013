@@ -37,20 +37,20 @@ class Arduino(object):
 
     def set_rudder(self, angle):
         """Set the rudder servo to a value between 1060 and 1920"""
-	angle = ((angle-135)*(430/45))+1060
-	if angle < 1060:
-		angle = 1060
-	if angle > 1920:
-		angle = 1920
+        angle = ((angle-135)*(430/45))+1060
+        if angle < 1060:
+            angle = 1060
+        elif angle > 1920:
+            angle = 1920
         return self.__sendCommand('r%03d' % angle)
 
     def set_sail(self, angle):
         """Set the sail servo to a value between 1050 and 1930"""
-	if angle < 180:
-		offset = angle
-	if angle >= 180:
-		offset = 360 - angle
-	offset = ((offset)*(880/72))+1050
+        if angle < 180:
+            offset = angle
+        elif angle >= 180:
+            offset = 360 - angle
+        offset = ((offset)*(880/72))+1050
         return self.__sendCommand('s%03d' % offset)
 
     def calibrate_wind_sensor(self):
