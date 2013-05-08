@@ -17,7 +17,10 @@ events = {
         'get northing': lambda: boat.gps.position.long,
         'get easting': lambda: boat.gps.position.lat,
         'set rudder': lambda arg: boat.arduino.set_rudder(arg),
-        'set sail': lambda arg: boat.arduino.set_sail(arg)
+        'set sail': lambda arg: boat.arduino.set_sail(arg),
+        'get waypointnum': lambda: boat.waypoints.waypointNumber,
+        'get waypointdist': boat.waypoints.distance,
+        'get waypointdir': lambda: int(boat.waypoints.bearing())
     }
 
 def get_event(s):
