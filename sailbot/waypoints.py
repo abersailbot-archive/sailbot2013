@@ -17,11 +17,11 @@ class Waypoints(object):
 
     def distance(self):
         """Return the distance to the next waypoint in meters"""
-        return self.gps.position.distance_to(self.next)
+        return self._gps.position.distance_to(self.next)
 
     def bearing(self):
         """Return the bearing to the nextwaypoint"""
-        return self.gps.position.bearing_to(self.next)
+        return self._gps.position.bearing_to(self.next)
 
     def set_next(self):
         """Assign the next waypoint to the subsequent point in the list"""
