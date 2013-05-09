@@ -37,6 +37,12 @@ class Waypoints(object):
         """Return the number of the current target waypoint"""
         return self._currentWaypoint
 
+    def load_from_file(self, filename):
+        with open(filename) as f:
+            lines = f.readlines()
+        for line in lines:
+            self.add_point(Point(*map(float, line.split())))
+
 if __name__ == '__main__':
     w = Waypoints()
     w.add_point(Point(52.42459, -4.08339))
