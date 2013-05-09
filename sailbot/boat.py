@@ -8,11 +8,13 @@ import time
 import traceback
 
 class Boat(object):
-    def __init__(self):
+    def __init__(self, waypointFile=None):
         """Constructor for the boat object"""
         self.arduino = Arduino()
         self.gps = Gps()
         self.waypoints = Waypoints(self.gps)
+        if waypointFile is not None:
+            self.waypoints.load_from_file(waypointFile)
         self._xbee = Xbee()
 
     def log(self, logfilename='logfile'):
