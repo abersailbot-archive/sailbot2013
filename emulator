@@ -45,8 +45,8 @@ while True:
             if data:
                 msg = str(get_event(data))
                 connection.sendall(msg)
-        connection.sendall('$')
-        print "Sent : " + msg
+                connection.sendall('$')
+                print "Sent : " + msg
             else:
                 break
     finally:
