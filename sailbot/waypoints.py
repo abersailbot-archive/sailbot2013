@@ -45,14 +45,4 @@ class Waypoints(object):
 
 if __name__ == '__main__':
     w = Waypoints()
-    w.add_point(Point(52.42459, -4.08339))
-    w.add_point(Point(52.42459, -3.08339))
-    w.add_point(Point(53.42459, -3.08339))
-    print w.distance()
-    print w.bearing()
-    w.set_next()
-    print w.distance()
-    print w.bearing()
-    w.set_next()
-    print w.distance()
-    print w.bearing()
+    w.load_from_file('waypoints.pnts')
