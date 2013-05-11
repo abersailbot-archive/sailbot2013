@@ -11,9 +11,13 @@ class Waypoints(object):
         self._points += [point]
 
     @property
-    def next(self):
+    def current(self):
         """Return the next waypoint"""
         return self._points[self._currentWaypoint]
+
+    def get_waypoint(self, n):
+        """Return the waypoint n places along the path"""
+        return self._points[n]
 
     def distance(self):
         """Return the distance to the next waypoint in meters"""

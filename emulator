@@ -11,29 +11,34 @@ server_address = ('localhost', 10006)
 sock.bind(server_address)
 print >>sys.stderr, 'starting up on %s port %s' % server_address
 
-events = {
-        'get compass': boat.arduino.get_compass,
-        'get wind_dir': boat.arduino.get_wind,
-        'get northing': lambda: boat.gps.position.long,
-        'get easting': lambda: boat.gps.position.lat,
-        'set rudder': lambda arg: boat.arduino.set_rudder(arg),
-        'set sail': lambda arg: boat.arduino.set_sail(arg),
-        'get waypointnum': lambda: boat.waypoints.waypointNumber,
-        'get waypointdist': boat.waypoints.distance,
-        'get waypointdir': lambda: int(boat.waypoints.bearing())
-    }
+events = [
+          {
+            'set rudder': lambda arg: boat.arduino.set_rudder(arg),
+            'set sail': lambda arg: boat.arduino.set_sail(arg),
+            'get waypointnorthing': lambda n:boat.waypoints.get_waypoint(n).long,
+            'get waypointeasting': lambda n: boat.waypoints.get_waypoint(n).lat
+          },
+          {
+            'get compass': boat.arduino.get_compass(),
+            'get wind_dir': boat.arduino.get_wind(),
+            'get northing': boat.gps.position.long,
+            'get easting': boat.gps.position.lat,
+            'get waypointnum': boat.waypoints.waypointNumber(),
+            'get waypointdist': boat.waypoints.distance(),
+            'get waypointdir': int(boat.waypoints.bearing())
+          }
+        ]
 
 def get_event(s):
-    for e in events:
+    for e in events[0]:
         match = re.match(e, s)
         if match:
-            if s.startswith('set'):
-                arg = s.split()[-1]
-                print 'setting to', arg
-                return events[e](int(arg))
-            else:
-                return events[e]()
-
+            arg = s.split()[-1]
+            return events[0][e](int(arg))
+    for e in events[1]:
+        match = re.match(e, s)
+        if match:
+            return events[1][e]
 while True:
     sock.listen(1)
 
