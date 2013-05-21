@@ -31,6 +31,11 @@ class Waypoints(object):
         """Assign the next waypoint to the subsequent point in the list"""
         self._currentWaypoint = min(self._currentWaypoint + 1,
                                     len(self._points) - 1)
+    
+    @property
+    def next(self):
+        """Return the next waypoint"""
+        return self._points[self._currentWaypoint + 1]
 
     def set_path(self, path):
         """Replace the current set of waypoints with a new path"""
