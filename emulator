@@ -23,7 +23,7 @@ events = [
             'get wind_dir': boat.arduino.get_wind(),
             'get northing': boat.gps.position.long,
             'get easting': boat.gps.position.lat,
-            'get waypointnum': boat.waypoints.waypointNumber(),
+            'get waypointnum': boat.waypoints.waypointNumber,
             'get waypointdist': boat.waypoints.distance(),
             'get waypointdir': int(boat.waypoints.bearing())
           }
