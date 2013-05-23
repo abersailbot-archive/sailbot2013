@@ -43,7 +43,6 @@ class Arduino(object):
         elif angle > 1920:
             angle = 1920
         self.__sendCommand('r%03d' % angle)
-        return ''
 
     def set_sail(self, angle):
         """Set the sail servo to a value between 1050 and 1930"""
@@ -53,7 +52,6 @@ class Arduino(object):
             offset = 360 - angle
         offset = ((offset)*(880/72))+1050
         self.__sendCommand('s%03d' % offset)
-        return ''
 
     def calibrate_wind_sensor(self):
         """
