@@ -56,10 +56,10 @@ while True:
 
             print >>sys.stderr, 'received "%s"' % data
             if data:
-                msg = str(get_event(data))
+                msg = get_event(data)
                 if msg is not None:
-                    connection.sendall(msg + '\n')
-                    print 'Sent : ' + msg
+                    connection.sendall(str(msg) + '\n')
+                    print 'Sent : ' + str(msg)
                 else:
                     print 'Didn\'t send a message for a set'
             else:
