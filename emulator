@@ -41,7 +41,6 @@ def get_event(s):
             return events[1][e]
 while True:
     sock.listen(1)
-
     connection, client_address = sock.accept()
     try:
         while True:
@@ -50,7 +49,7 @@ while True:
             if data:
                 msg = str(get_event(data))
                 connection.sendall(msg)
-                connection.sendall('$')
+                connection.sendall('$' + chr(0))
                 print "Sent : " + msg
             else:
                 break
