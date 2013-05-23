@@ -21,13 +21,13 @@ events = [
           },
           {
             #events without arguments
-            'get compass': boat.arduino.get_compass(),
-            'get wind_dir': boat.arduino.get_wind(),
-            'get northing': boat.gps.position.long,
-            'get easting': boat.gps.position.lat,
-            'get waypointnum': boat.waypoints.waypointNumber,
-            'get waypointdist': boat.waypoints.distance(),
-            'get waypointdir': int(boat.waypoints.bearing())
+            'get compass': lambda: boat.arduino.get_compass(),
+            'get wind_dir': lambda: boat.arduino.get_wind(),
+            'get northing': lambda: boat.gps.position.long,
+            'get easting': lambda: boat.gps.position.lat,
+            'get waypointnum': lambda: boat.waypoints.waypointNumber,
+            'get waypointdist': lambda: boat.waypoints.distance(),
+            'get waypointdir': lambda: int(boat.waypoints.bearing())
           }
         ]
 
@@ -40,7 +40,7 @@ def get_event(s):
     for e in events[1]:
         match = re.match(e, s)
         if match:
-            return events[1][e]
+            return events[1][e]()
 while True:
     sock.listen(1)
 
