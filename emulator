@@ -16,7 +16,7 @@ events = [
             #events with arguments
             'set rudder': lambda arg: boat.arduino.set_rudder(arg),
             'set sail': lambda arg: boat.arduino.set_sail(arg),
-            'get waypointnorthing': lambda n:boat.waypoints.get_waypoint(n).long,
+            'get waypointnorthing': lambda n: boat.waypoints.get_waypoint(n).long,
             'get waypointeasting': lambda n: boat.waypoints.get_waypoint(n).lat
           },
           {
@@ -47,7 +47,14 @@ while True:
     connection, client_address = sock.accept()
     try:
         while True:
-            data = connection.recv(32)
+            data = ''
+            while True:
+                c = connection.recv(1)
+                if c == '\n' or c == '':
+                    break
+                else:
+                    data += c
+
             print >>sys.stderr, 'received "%s"' % data
             if data:
                 msg = str(get_event(data))
