@@ -6,7 +6,7 @@ import time
 from sailbot import Boat
 
 boat = Boat('waypoints.pnts')
-logfile = '-'.join(['log-taken-on'] + time.asctime().split()[:-1])
+logfile = 'log/' + '-'.join(['log-taken-on'] + time.asctime().split()[:-1])
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server_address = ('localhost', 10006)
