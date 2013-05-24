@@ -82,7 +82,7 @@ int readCompass() {
   highByte = Wire.read(); // Reads in the bytes and convert them into proper degree units.
   lowByte = Wire.read();
   float heading = ((highByte << 8) + lowByte) / 10.0; // the heading in degrees
-  heading = heading + 90;
+  heading = heading - 90;
   heading = mod(heading);
   return (int)heading; // Print the sensor readings to the serial port.
 }
