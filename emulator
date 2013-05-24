@@ -5,6 +5,7 @@ import re
 from sailbot import Boat
 
 boat = Boat('waypoints.pnts')
+logfile = '-'.join(['log-taken-on'] + time.asctime().split()[:-1])
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server_address = ('localhost', 10006)
@@ -46,7 +47,7 @@ while True:
     try:
         while True:
             if boat.gps.shouldLog:
-                boat.log()
+                boat.log(logfile)
                 boat.gps.shouldLog = False
 
             data = ''
