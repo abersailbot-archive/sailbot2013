@@ -69,7 +69,7 @@ class Boat(object):
     def get_wind_average(self):
         self.s += (sin(self.get_wind_bearing()) - self.s) / self.r
         self.c += (cos(self.get_wind_bearing()) - self.c) / self.r
-        return int(atan2(self.s, self.c))
+        return int((atan2(self.s, self.c) * 180) + 180)
 
     def set_waypoint_northing(self, v):
         self._waypointN = v
