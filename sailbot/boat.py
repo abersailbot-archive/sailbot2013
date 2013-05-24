@@ -68,6 +68,7 @@ class Boat(object):
         return w
 
     def get_wind_average(self):
+        get_wind_bearing()
         return sum(self.windreadings) / len(self.windreadings)
 
     def set_waypoint_northing(self, v):
