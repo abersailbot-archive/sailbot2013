@@ -2,8 +2,8 @@ from arduino import Arduino
 from bearing import Bearing
 from gps import Gps
 from xbee import Xbee
-from waypoints import Waypoints
 from math import sin, cos, atan2
+import math
 import config
 
 import time
@@ -67,9 +67,9 @@ class Boat(object):
         return wind + bearing
 
     def get_wind_average(self):
-        self.s += (sin(self.get_wind_bearing()) - self.s) / self.r
-        self.c += (cos(self.get_wind_bearing()) - self.c) / self.r
-        return int((atan2(self.s, self.c) * 180) + 180)
+        self.s += (sin(math.radians(self.get_wind_bearing())) - self.s) / self.r
+        self.c += (cos(math.radians(self.get_wind_bearing())) - self.c) / self.r
+        return math.degrees(atan2(self.s, self.c))
 
     def set_waypoint_northing(self, v):
         self._waypointN = v
