@@ -45,6 +45,10 @@ while True:
     connection, client_address = sock.accept()
     try:
         while True:
+            if boat.gps.shouldLog:
+                boat.log()
+                boat.gps.shouldLog = False
+
             data = ''
             while True:
                 c = connection.recv(1)

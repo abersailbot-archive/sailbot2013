@@ -27,14 +27,16 @@ class Boat(object):
  wind={wind}\
  lat={pos.lat}\
  lon={pos.long}\
- waypointnorthing={wpn}\
- waypointeasting={wpe}\n\r'.format(
+ nwlat={wpn}\
+ nwlon={wpe}\
+ nwn={num}\n\r'.format(
                     time = int(time.time()),
                     head = self.arduino.get_compass(),
                     wind = self.arduino.get_wind(),
                     pos = self.gps.position,
                     wpn = self._waypointN,
-                    wpe= self._waypointE
+                    wpe= self._waypointE,
+                    num = self._waypointNumber
                 )
 
             # write to log file

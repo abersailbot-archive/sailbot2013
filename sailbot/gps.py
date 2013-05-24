@@ -46,6 +46,10 @@ class Gps(object):
         self._gpsSerial.flushOutput()
         time.sleep(0.25)
 
+        self.lastRead = 0
+        self.lastPostition = None
+        self.shouldLog = False
+
     def _send_command(self, command):
         print 'sending:', command + '\r\n'
         self._gpsSerial.write(command + '\r\n')
@@ -53,6 +57,13 @@ class Gps(object):
     @property
     def position(self):
         """Return a Point containing the current coordinates from the GPS"""
+
+        if time.time() - self.lastRead > config.gpsCacheTimeout:
+            self.lastRead = time.time()
+            self.shouldLog = True
+        else:
+            return self.lastPostition
+
         try:
             line = self.get_gga_line()
             print line
@@ -73,7 +84,8 @@ class Gps(object):
                     lat = -1
                 if long is None:
                     long = -1
-                return Point(lat, long)
+                self.lastPostition = Point(lat, long)
+                return self.lastPostition
         else:
             raise ValueError('Checksum failed on "{}"'.format(line))
 
