@@ -12,21 +12,29 @@ class Boat(object):
         """Constructor for the boat object"""
         self.arduino = Arduino()
         self.gps = Gps()
-        self.waypoints = Waypoints(self.gps)
-        if waypointFile is not None:
-            self.waypoints.load_from_file(waypointFile)
         self._xbee = Xbee()
+        self._waypointN = 0
+        self._waypointE = 0
+        self._waypointNumber = 0
 
     def log(self, logfilename='logfile'):
         """
         Log the output of the sensors to stdout, a logfile and down the xbee
         """
         try:
-            l = 'time={time} bhead={head} wind={wind} lat={pos.lat} lon={pos.long}\n\r'.format(
+            l = 'time={time}\
+ bhead={head}\
+ wind={wind}\
+ lat={pos.lat}\
+ lon={pos.long}\
+ waypointnorthing={wpn}\
+ waypointeasting={wpe}\n\r'.format(
                     time = int(time.time()),
                     head = self.arduino.get_compass(),
                     wind = self.arduino.get_wind(),
-                    pos = self.gps.position
+                    pos = self.gps.position,
+                    wpn = self._waypointN,
+                    wpe= self._waypointE
                 )
 
             # write to log file
@@ -49,6 +57,18 @@ class Boat(object):
         wind = Bearing(self.arduino.get_wind())
         bearing = Bearing(self.arduino.get_compass())
         return wind + bearing
+
+    def set_waypoint_northing(self, v):
+        self._waypointN = v
+
+    def set_waypoint_easting(self, v):
+        self._waypointE = v
+
+    def get_waypoint_number(self):
+        return self._waypointNumber
+
+    def set_waypoint_number(self, v):
+        self._waypointNumber = v
 
 if __name__ == '__main__':
     b = Boat()

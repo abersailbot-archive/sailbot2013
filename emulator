@@ -14,20 +14,19 @@ print >>sys.stderr, 'starting up on %s port %s' % server_address
 events = [
           {
             #events with arguments
-            'set rudder': lambda arg: boat.arduino.set_rudder(arg),
-            'set sail': lambda arg: boat.arduino.set_sail(arg),
-            'get waypointnorthing': lambda n: boat.waypoints.get_waypoint(n).long,
-            'get waypointeasting': lambda n: boat.waypoints.get_waypoint(n).lat
+            'set rudder': boat.arduino.set_rudder,
+            'set sail': boat.arduino.set_sail,
+            'set waypointnorthing': boat.set_waypoint_northing,
+            'set waypointeasting': boat.set_waypoint_easting,
+            'set waypointnumber': boat.set_waypoint_number
           },
           {
             #events without arguments
-            'get compass': lambda: boat.arduino.get_compass(),
-            'get wind_dir': lambda: boat.arduino.get_wind(),
+            'get compass': boat.arduino.get_compass,
+            'get wind_dir': boat.arduino.get_wind,
             'get northing': lambda: boat.gps.position.long,
             'get easting': lambda: boat.gps.position.lat,
-            'get waypointnum': lambda: boat.waypoints.waypointNumber,
-            'get waypointdist': lambda: boat.waypoints.distance(),
-            'get waypointdir': lambda: int(boat.waypoints.bearing())
+            'get waypointnum': boat.get_waypoint_number,
           }
         ]
 
