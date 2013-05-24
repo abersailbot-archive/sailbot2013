@@ -35,7 +35,7 @@ def get_event(s):
         match = re.match(e, s)
         if match:
             arg = s.split()[-1]
-            return events[0][e](int(arg))
+            return events[0][e](float(arg))
     for e in events[1]:
         match = re.match(e, s)
         if match:
