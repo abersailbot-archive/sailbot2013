@@ -62,9 +62,9 @@ class Boat(object):
         wind = Bearing(self.arduino.get_wind())
         bearing = Bearing(self.arduino.get_compass())
         w = wind + bearing
-        self.windreadings += [w]
+        self.windreadings += [int(w)]
         if len(self.windreadings) > config.maxWindReadings:
-            self.windreadings = self.windreadings[:-1]
+            self.windreadings = self.windreadings[1:]
         return w
 
     def get_wind_average(self):
