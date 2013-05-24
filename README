@@ -18,7 +18,3 @@ TODO:
     Cache gps data
     Wind sensor averaging
     Read other gps strings (get speed)
-    Read waypoints from java
-        * set waypointnorthing
-        * set waypointeasting
-        * set waypointnumber
