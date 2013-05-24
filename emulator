@@ -2,6 +2,7 @@
 import socket
 import sys
 import re
+import time
 from sailbot import Boat
 
 boat = Boat('waypoints.pnts')
@@ -24,7 +25,7 @@ events = [
           {
             #events without arguments
             'get compass': boat.arduino.get_compass,
-            'get wind_dir': boat.arduino.get_wind,
+            'get wind_dir': boat.arduino.get_wind_average,
             'get northing': lambda: boat.gps.position.long,
             'get easting': lambda: boat.gps.position.lat,
             'get waypointnum': boat.get_waypoint_number,

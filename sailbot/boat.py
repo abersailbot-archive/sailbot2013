@@ -3,6 +3,7 @@ from bearing import Bearing
 from gps import Gps
 from xbee import Xbee
 from waypoints import Waypoints
+import config
 
 import time
 import traceback
@@ -16,6 +17,8 @@ class Boat(object):
         self._waypointN = 0
         self._waypointE = 0
         self._waypointNumber = 0
+
+        self.windreadings = []
 
     def log(self, logfilename='logfile'):
         """
@@ -58,7 +61,14 @@ class Boat(object):
         """Return the absolute bearing of the wind"""
         wind = Bearing(self.arduino.get_wind())
         bearing = Bearing(self.arduino.get_compass())
-        return wind + bearing
+        w = wind + bearing
+        self.windreadings += [w]
+        if len(self.windreadings) > config.maxWindReadings:
+            self.windreadings = self.windreadings[:-1]
+        return w
+
+    def get_wind_average(self):
+        return sum(self.windreadings) / len(self.windreadings)
 
     def set_waypoint_northing(self, v):
         self._waypointN = v

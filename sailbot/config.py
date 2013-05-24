@@ -5,3 +5,5 @@ xbeeSerialport = '/dev/ttyAMA0'
 xbeeBaudRate = 115200
 
 gpsCacheTimeout = 1
+
+maxWindReadings = 50
