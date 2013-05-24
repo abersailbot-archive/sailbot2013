@@ -26,8 +26,8 @@ events = [
             #events without arguments
             'get compass': boat.arduino.get_compass,
             'get wind_dir': boat.get_wind_average,
-            'get northing': lambda: boat.gps.position.long,
-            'get easting': lambda: boat.gps.position.lat,
+            'get northing': lambda: boat.gps.position.lat,
+            'get easting': lambda: boat.gps.position.long,
             'get waypointnum': boat.get_waypoint_number,
           }
         ]
