@@ -69,7 +69,7 @@ class Boat(object):
     def get_wind_average(self):
         self.s += (sin(math.radians(self.get_wind_bearing())) - self.s) / self.r
         self.c += (cos(math.radians(self.get_wind_bearing())) - self.c) / self.r
-        a = math.degrees(atan2(self.s, self.c))
+        a = int(math.degrees(atan2(self.s, self.c)))
         if a < 0:
             return a + 360
         else:
