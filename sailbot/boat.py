@@ -3,6 +3,7 @@ from bearing import Bearing
 from gps import Gps
 from xbee import Xbee
 from waypoints import Waypoints
+from math import sin, cos, atan2
 import config
 
 import time
@@ -18,7 +19,9 @@ class Boat(object):
         self._waypointE = 0
         self._waypointNumber = 0
 
-        self.windreadings = []
+        self.s = 0
+        self.c = 0
+        self.r = 0.1
 
     def log(self, logfilename='logfile'):
         """
@@ -35,7 +38,7 @@ class Boat(object):
  nwn={num}\n\r'.format(
                     time = int(time.time()),
                     head = self.arduino.get_compass(),
-                    wind = self.arduino.get_wind_average(),
+                    wind = self.get_wind_average(),
                     pos = self.gps.position,
                     wpn = self._waypointN,
                     wpe= self._waypointE,
@@ -61,16 +64,12 @@ class Boat(object):
         """Return the absolute bearing of the wind"""
         wind = Bearing(self.arduino.get_wind())
         bearing = Bearing(self.arduino.get_compass())
-        w = wind + bearing
-        self.windreadings += [int(w)]
-        if len(self.windreadings) > config.maxWindReadings:
-            self.windreadings = self.windreadings[1:]
-        return w
+        return wind + bearing
 
     def get_wind_average(self):
-        self.get_wind_bearing()
-        print(self.windreadings)
-        return sum(self.windreadings) / len(self.windreadings)
+        self.s += (sin(self.get_wind_bearing()) - self.s) / self.r
+        self.c += (cos(self.get_wind_bearing()) - self.c) / self.r
+        return atan2(self.s, self.c)
 
     def set_waypoint_northing(self, v):
         self._waypointN = v
