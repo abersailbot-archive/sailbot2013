@@ -35,7 +35,7 @@ class Boat(object):
  nwn={num}\n\r'.format(
                     time = int(time.time()),
                     head = self.arduino.get_compass(),
-                    wind = self.arduino.get_wind(),
+                    wind = self.arduino.get_wind_average(),
                     pos = self.gps.position,
                     wpn = self._waypointN,
                     wpe= self._waypointE,
@@ -68,7 +68,8 @@ class Boat(object):
         return w
 
     def get_wind_average(self):
-        get_wind_bearing()
+        self.get_wind_bearing()
+        print(self.windreadings)
         return sum(self.windreadings) / len(self.windreadings)
 
     def set_waypoint_northing(self, v):
