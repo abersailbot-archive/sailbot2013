@@ -35,7 +35,7 @@ class Boat(object):
  nwn={num}\n\r'.format(
                     time = int(time.time()),
                     head = self.arduino.get_compass(),
-                    wind = self.arduino.get_wind_average(),
+                    wind = self.get_wind_average(),
                     pos = self.gps.position,
                     wpn = self._waypointN,
                     wpe= self._waypointE,
