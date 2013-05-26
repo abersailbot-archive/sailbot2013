@@ -16,6 +16,8 @@ class Arduino(object):
         except Exception:
             raise Exception('Cannot connect to arduino on %s' % port)
         time.sleep(2)
+        self.rudderAngle = 0
+        self.sailAngle = 0
 
     def __sendCommand(self, c):
         """
@@ -38,6 +40,7 @@ class Arduino(object):
     def set_rudder(self, angle):
         """Set the rudder servo to a value between 1060 and 1920"""
         angle = ((angle-135)*(430/45))+1060
+        self.rudderAngle = angle
         if angle < 1060:
             angle = 1060
         elif angle > 1920:
@@ -50,6 +53,7 @@ class Arduino(object):
             offset = angle
         elif angle >= 180:
             offset = 360 - angle
+        self.sailAngle = offset
         offset = ((offset)*(880/72))+1050
         self.__sendCommand('s%03d' % offset)
 

@@ -35,14 +35,18 @@ class Boat(object):
  lon={pos.long}\
  nwlat={wpn}\
  nwlon={wpe}\
- nwn={num}\n\r'.format(
+ nwn={num}\
+ spos={sail}\
+ rpos={rudder}\n\r'.format(
                     time = int(time.time()),
                     head = self.arduino.get_compass(),
                     wind = self.get_wind_average(),
                     pos = self.gps.position,
                     wpn = self._waypointN,
                     wpe= self._waypointE,
-                    num = self._waypointNumber
+                    num = self._waypointNumber,
+                    sail = self.arduino.sailAngle,
+                    rudder = self.arduino.rudderAngle
                 )
 
             # write to log file
