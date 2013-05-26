@@ -20,7 +20,9 @@ events = [
             'set sail': boat.arduino.set_sail,
             'set waypointnorthing': boat.set_waypoint_northing,
             'set waypointeasting': boat.set_waypoint_easting,
-            'set waypointnum': boat.set_waypoint_number
+            'set waypointnum': boat.set_waypoint_number,
+            'set waypointdistance': boat.set_waypoint_distance,
+            'set waypointheading': boat.set_waypoint_heading
           },
           {
             #events without arguments

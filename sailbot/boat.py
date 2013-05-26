@@ -18,6 +18,8 @@ class Boat(object):
         self._waypointN = 0
         self._waypointE = 0
         self._waypointNumber = 0
+        self._waypointDist = 0
+        self._waypointHeading = 0
 
         self.s = 0
         self.c = 0
@@ -90,6 +92,12 @@ class Boat(object):
 
     def set_waypoint_number(self, v):
         self._waypointNumber = v
+
+    def set_waypoint_distance(self, v):
+        self._waypointDist = v
+
+    def set_waypoint_heading(self, v):
+        self._waypointHeading
 
 if __name__ == '__main__':
     b = Boat()
