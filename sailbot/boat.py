@@ -21,7 +21,7 @@ class Boat(object):
 
         self.s = 0
         self.c = 0
-        self.r = 0.1
+        self.r = 250
 
     def log(self, logfilename='logfile'):
         """
