@@ -26,7 +26,9 @@ events = [
             'set waypointeasting': boat.set_waypoint_easting,
             'set waypointnum': boat.set_waypoint_number,
             'set waypointdistance': boat.set_waypoint_distance,
-            'set waypointheading': boat.set_waypoint_heading
+            'set waypointheading': boat.set_waypoint_heading,
+            'set targetheading': boat.set_target_heading,
+            'set targetdistance': boat.set_target_distance
           },
           {
             #events without arguments

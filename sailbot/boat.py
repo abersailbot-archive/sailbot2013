@@ -20,6 +20,8 @@ class Boat(object):
         self._waypointNumber = 0
         self._waypointDist = 0
         self._waypointHeading = 0
+        self._targetHeading = 0
+        self._targetDistance = 0
 
         self.s = 0
         self.c = 0
@@ -42,7 +44,9 @@ class Boat(object):
  rpos={rudder}\
  whead={waypointHeading}\
  distance={waypointDistance}\
- speed={speed}\n\r'.format(
+ speed={speed}\
+ thead={targetHeading}\
+ tdist={targetDistance}\n\r'.format(
                     time = int(time.time()),
                     head = self.arduino.get_compass(),
                     wind = self.get_wind_average(),
@@ -54,7 +58,9 @@ class Boat(object):
                     rudder = self.arduino.rudderAngle,
                     waypointHeading = self._waypointHeading,
                     waypointDistance = self._waypointDist,
-                    speed = self.gps.speed
+                    speed = self.gps.speed,
+                    targetHeading = self._targetHeading,
+                    targetDistance = self._targetDistance
                 )
 
             # write to log file
@@ -104,6 +110,12 @@ class Boat(object):
 
     def set_waypoint_heading(self, v):
         self._waypointHeading
+
+    def set_target_heading(self, v):
+        self._targetHeading = v
+
+    def set_target_distance(self, v):
+        self._targetDistance = v
 
 if __name__ == '__main__':
     b = Boat()
