@@ -3,6 +3,8 @@ import socket
 import sys
 import re
 import time
+import traceback
+
 from sailbot import Boat
 
 boat = Boat('waypoints.pnts')
@@ -12,6 +14,8 @@ sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server_address = ('localhost', 10006)
 sock.bind(server_address)
 print >>sys.stderr, 'starting up on %s port %s' % server_address
+
+DEBUG = True
 
 events = [
           {
@@ -63,7 +67,15 @@ while True:
 
             print >>sys.stderr, 'received "%s"' % data
             if data:
-                msg = get_event(data)
+                try:
+                    msg = get_event(data)
+                except:
+                    print traceback.format_exc()
+                    if DEBUG:
+                        sys.exit(1)
+                    else:
+                        #try to keep going if an error occurred
+                        break
                 if msg is not None:
                     connection.sendall(str(msg) + '\n')
                     print 'Sent : ' + str(msg)
