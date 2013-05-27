@@ -13,7 +13,3 @@ To calibrate the wind sensor, run
     $ ./calibrate_wind
 
 and turn the vane on the sensor to face the bow.
-
-TODO:
-    Wind sensor averaging
-    Read other gps strings (get speed)
