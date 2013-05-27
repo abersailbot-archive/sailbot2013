@@ -50,6 +50,8 @@ class Gps(object):
         self.lastPostition = None
         self.shouldLog = False
 
+        self.speed = 0
+
     def _send_command(self, command):
         print 'sending:', command + '\r\n'
         self._gpsSerial.write(command + '\r\n')
@@ -65,14 +67,14 @@ class Gps(object):
             return self.lastPostition
 
         try:
-            line = self.get_gga_line()
+            line = self.get_rmc_line()
             print line
         except IOError:
             return Point(-1, -1)
 
         if self.checksum(line):
             fields = self._name_fields(line)
-            if fields.id == 'GPGGA':
+            if fields.id == 'GPRMC':
                 lat = self._parse_degrees(fields.lat)
                 long = self._parse_degrees(fields.long)
 
@@ -85,6 +87,7 @@ class Gps(object):
                 if long is None:
                     long = -1
                 self.lastPostition = Point(lat, long)
+                self.speed = fields.speed
                 return self.lastPostition
         else:
             raise ValueError('Checksum failed on "{}"'.format(line))
@@ -95,9 +98,6 @@ class Gps(object):
         self._gpsSerial.write(getCommand)
         time.sleep(0.1)
         return self._gpsSerial.readline(None).strip()
-
-    def get_gga_line(self):
-        return self._get_line('$PSRF103,00,01,00,01*25\r\n')
 
     def get_rmc_line(self):
         return self._get_line('$PSRF103,04,01,00,01*21\r\n')
@@ -125,8 +125,8 @@ class Gps(object):
         return check_digits == x
 
     def _name_fields(self, line):
-        """Return an AttributeDict containing the more important GGA fields"""
-        fields = line[1:-3].split(',')[:8]
+        """Return an AttributeDict containing the more important RMC fields"""
+        fields = line[1:-3].split(',')[:5]
         names = [
                     'id',
                     'time',
@@ -134,10 +134,7 @@ class Gps(object):
                     'lat_direction',
                     'long',
                     'long_direction',
-                    'fix_quality',
-                    'satellite_number',
-                    'hdop',
-                    'altitude'
+                    'speed',
                 ]
         d = AttributeDict()
         for i in range(len(fields)):
