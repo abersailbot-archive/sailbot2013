@@ -126,10 +126,11 @@ class Gps(object):
 
     def _name_fields(self, line):
         """Return an AttributeDict containing the more important RMC fields"""
-        fields = line[1:-3].split(',')[:5]
+        fields = line[1:-3].split(',')[:8]
         names = [
                     'id',
                     'time',
+                    'validity',
                     'lat',
                     'lat_direction',
                     'long',
