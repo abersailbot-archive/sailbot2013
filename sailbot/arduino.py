@@ -39,8 +39,8 @@ class Arduino(object):
 
     def set_rudder(self, angle):
         """Set the rudder servo to a value between 1060 and 1920"""
-        angle = ((angle-135)*(430/45))+1060
         self.rudderAngle = angle
+        angle = ((angle-135)*(430/45))+1060
         if angle < 1060:
             angle = 1060
         elif angle > 1920:
