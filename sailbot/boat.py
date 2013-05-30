@@ -109,7 +109,7 @@ class Boat(object):
         self._waypointDist = v
 
     def set_waypoint_heading(self, v):
-        self._waypointHeading
+        self._waypointHeading = v
 
     def set_target_heading(self, v):
         self._targetHeading = v
