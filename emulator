@@ -13,7 +13,6 @@ logfile = 'log/' + '-'.join(['log-taken-on'] + time.asctime().split()[:-1])
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server_address = ('localhost', 5555)
 sock.bind(server_address)
-print >>sys.stderr, 'starting up on %s port %s' % server_address
 
 DEBUG = True
 
@@ -51,9 +50,10 @@ def get_event(s):
         if match:
             return events[1][e]()
 
-def log(message):
-    print '[\033[1;32m{}\033[0m]: {}'.format(time.time(), message)
+def log(message, col=32):
+    print  '[\033[1;{col}m{}\033[0m]: {}'.format(time.time(), message, col=col)
 
+log('starting up on %s port %s' % server_address)
 while True:
     sock.listen(1)
     connection, client_address = sock.accept()
@@ -71,7 +71,7 @@ while True:
                 else:
                     data += c
 
-            print >>sys.stderr, 'received "%s"' % data
+            log('received "%s"' % data, col=33)
             if data:
                 try:
                     msg = get_event(data)
@@ -84,7 +84,7 @@ while True:
                         break
                 if msg is not None:
                     connection.sendall(str(msg) + '\n')
-                    log('Sent : ' + str(msg))
+                    log('Sent : ' + str(msg), col=31)
                 else:
                     log('Didn\'t send a message for a set')
             else:

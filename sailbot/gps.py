@@ -56,7 +56,7 @@ class Gps(object):
         self.speed = 0
 
     def _send_command(self, command):
-        log('sending:', command + '\r\n')
+        log('sending: ' + command + '\r\n')
         self._gpsSerial.write(command + '\r\n')
 
     @property
