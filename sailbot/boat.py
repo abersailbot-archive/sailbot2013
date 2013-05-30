@@ -9,6 +9,10 @@ import config
 import time
 import traceback
 
+
+def log(message):
+        print '[\033[1;32m{}\033[0m]: {}'.format(time.time(), message)
+
 class Boat(object):
     def __init__(self, waypointFile=None):
         """Constructor for the boat object"""
@@ -71,7 +75,7 @@ class Boat(object):
             self._xbee.send(l)
             
            # write to console
-            print l
+            log(l)
 
         except:
             trace = traceback.format_exc()

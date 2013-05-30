@@ -22,6 +22,9 @@ def _float_or_none(value):
     else:
         return None
 
+def log(message):
+        print '[\033[1;32m{}\033[0m]: {}'.format(time.time(), message)
+
 class Gps(object):
     """A GPS receiver"""
     def __init__(self):
@@ -53,7 +56,7 @@ class Gps(object):
         self.speed = 0
 
     def _send_command(self, command):
-        print 'sending:', command + '\r\n'
+        log('sending:', command + '\r\n')
         self._gpsSerial.write(command + '\r\n')
 
     @property
@@ -68,7 +71,7 @@ class Gps(object):
 
         try:
             line = self.get_rmc_line()
-            print line
+            log(line)
         except IOError:
             return Point(-1, -1)
 
