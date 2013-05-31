@@ -93,7 +93,7 @@ class Gps(object):
                 self.speed = fields.speed
                 return self.lastPostition
         else:
-            raise ValueError('Checksum failed on "{}"'.format(line))
+            return Point(-1, -1)
 
     def _get_line(self, getCommand):
         self._gpsSerial.flushInput()
