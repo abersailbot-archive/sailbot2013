@@ -6,7 +6,7 @@ import sys
 
 while True:
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    server_address = ('localhost', 10006)
+    server_address = ('localhost', 5555)
     sock.connect(server_address)
     try:
         message = raw_input('command: ')
