@@ -4,9 +4,11 @@ Sailbot 2013 (http://sailbot.org).
 All of the code contained within is licenced under the GPLv3. See COPYING for
 more details.
 
-To run the code (current code simply logs sensor data), execute
+To run the code, execute
 
-    $ ./run
+    $ ./emulator
+
+then run a program to send commands (most likely abersailbot/SailbotLogic)
 
 To calibrate the wind sensor, run
 
