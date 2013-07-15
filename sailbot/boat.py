@@ -19,6 +19,7 @@ class Boat(object):
         self.arduino = Arduino()
         self.gps = Gps()
         self._xbee = Xbee()
+	self._xbee.start()
         self._waypointN = 0
         self._waypointE = 0
         self._waypointNumber = 0
@@ -72,7 +73,7 @@ class Boat(object):
                 f.write(l)
 
             # write to xbee
-            self._xbee.send(l)
+            self._xbee.updateLog(l)
             
            # write to console
             log(l)
