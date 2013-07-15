@@ -11,3 +11,8 @@ class Xbee(object):
     def send(self, message):
         """Send a message to the xbee"""
         self._xbeeSerial.write(message + '$')
+
+    def recieve(self):
+        """Recieve a message from the xbee"""
+        return self._xbeeSerial.read(1)
+        
