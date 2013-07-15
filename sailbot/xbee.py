@@ -4,16 +4,19 @@ import threading
 
 class Xbee(threading.Thread):
     """An xbee device"""
-    def __init__(self, serialPortName='/dev/ttyAMA0', baudRate=None):
+    def __init__(self, serialPortName=None, baudRate=None):
         if baudRate is None:
             baudRate = config.xbeeBaudRate
-        self._xbeeSerial = serial.Serial(config.xbeeSerialport, baudRate)
+        if serialPortName is None:
+            serialPortName = config.xbeeSerialport
+
+        self._xbeeSerial = serial.Serial(serialPortName, baudRate)
 
     def run(self):
         while True:
-            commandChar = recieve()
+            commandChar = self.recieve()
             if commandChar is 'l':
-                send(self.logs)
+                self.send(self.logs)
 
     def send(self, message):
         """Send a message to the xbee"""
