@@ -26,6 +26,6 @@ class Xbee(threading.Thread):
         """Recieve a message from the xbee"""
         return self._xbeeSerial.read(1)
         
-    def updateLog(self, log):
+    def update_log(self, log):
         """Updates the stored log"""
         self.logs = log
