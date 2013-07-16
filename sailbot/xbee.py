@@ -11,8 +11,8 @@ class Xbee():
             serialPortName = config.xbeeSerialport
 
         self._xbeeSerial = serial.Serial(serialPortName, baudRate)
-	_xbeeThread = XbeeThread()
-	XbeeThread.start()
+        _xbeeThread = XbeeThread()
+        XbeeThread.start()
 
     def send(self, message):
         """Send a message to the xbee"""
@@ -24,15 +24,15 @@ class Xbee():
         
     def update_log(self, log):
         """Updates the stored log"""
-	    with XbeeThread.logLock:
+        with XbeeThread.logLock:
             XbeeThread.logs = log
 
-class XbeeThread(threading.Thread):
-    def run(self):
-        logLock = threading.Lock()
-        while True:
-            commandChar = self.recieve()
-            if commandChar is 'l':
-                with logLock:
-                    Xbee.send(self.logs)
+    class XbeeThread(threading.Thread):
+        def run(self):
+            logLock = threading.Lock()
+            while True:
+                commandChar = self.recieve()
+                if commandChar is 'l':
+                    with logLock:
+                        Xbee.send(self.logs)
 
