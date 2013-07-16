@@ -24,12 +24,15 @@ class Xbee():
         
     def update_log(self, log):
         """Updates the stored log"""
-        XbeeThread.logs = log
+	    with XbeeThread.logLock:
+            XbeeThread.logs = log
 
 class XbeeThread(threading.Thread):
     def run(self):
+        logLock = threading.Lock()
         while True:
             commandChar = self.recieve()
             if commandChar is 'l':
-                Xbee.send(self.logs)
+                with logLock:
+                    Xbee.send(self.logs)
 
