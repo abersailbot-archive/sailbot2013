@@ -19,7 +19,6 @@ class Boat(object):
         self.arduino = Arduino()
         self.gps = Gps()
         self._xbee = Xbee()
-	self._xbee.start()
         self._waypointN = 0
         self._waypointE = 0
         self._waypointNumber = 0
