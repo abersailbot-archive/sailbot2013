@@ -20,7 +20,7 @@ class Xbee():
 
     def recieve(self):
         """Recieve a message from the xbee"""
-        return self._xbeeSerial.read(1)
+        return self._xbeeSerial.read(40)
         
     def update_log(self, log):
         """Updates the stored log"""
@@ -31,8 +31,17 @@ class Xbee():
         def run(self):
             logLock = threading.Lock()
             while True:
-                commandChar = self.recieve()
-                if commandChar is 'l':
+		recieved = self.recieve()
+                command = recieved[:recieved.find(' ')]
+		data = recieved[recieved.find(' '):]
+                if command is 'get_log':
                     with logLock:
                         Xbee.send(self.logs)
-
+                elif command is 'clear_waypoints':
+                        
+                elif command is 'add_waypoint':
+                        
+                elif command is 'remove_waypoint':
+                        
+                elif command is 'move_waypoint':
+                         
