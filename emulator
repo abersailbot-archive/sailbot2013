@@ -85,9 +85,8 @@ class InputThread(threading.Thread):
                 if c == '\n':
                     with self.queueLock:
                         self.inputQueue.append(data)
-                        log('received "%s"' % data, col=33)
+                        #log('received "%s"' % data, col=33)
                     data = ''
-                    print self.inputQueue
                 else:
                     data += c
             time.sleep(0.001)
@@ -115,11 +114,10 @@ class OutputThread(threading.Thread):
             if len(self.outputQueue) > 0:
                 with self.queueLock:
                     msg = self.outputQueue[0]
-                    print self.outputQueue
                     if msg is not None:
                         connection.sendall(str(msg) + '\n')
                         del self.outputQueue[0]
-                        log('Sent : ' + str(msg), col=31)
+                        #log('Sent : ' + str(msg), col=31)
                     else:
                         log('Didn\'t send a message for a set')
             time.sleep(0.001)
@@ -144,8 +142,8 @@ while True:
     try:
         while True:
             if boat.gps.shouldLog:
-                boat.log(logfile)
                 boat.gps.shouldLog = False
+                boat.log(logfile)
             with queueLock:
                 if len(inputQueue) > 0:
                     data = inputQueue[0]
