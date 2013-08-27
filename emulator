@@ -33,11 +33,11 @@ events = [
           },
           {
             #events without arguments
-            'get compass': boat.arduino.get_compass,
-            'get wind_dir': boat.get_wind_average,
-            'get northing': lambda: boat.gps.position.lat,
-            'get easting': lambda: boat.gps.position.long,
-            'get waypointnum': boat.get_waypoint_number,
+            'get compass': lambda: 'set compass {}'.format(boat.arduino.get_compass()),
+            'get wind_dir': lambda: 'set wind_dir {}'.format(boat.get_wind_average()),
+            'get northing': lambda: 'set northing {}'.format(boat.gps.position.lat),
+            'get easting': lambda: 'set easting {}'.format(boat.gps.position.long),
+            'get waypointnum': lambda: 'set waypointnum {}'.format(boat.get_waypoint_number()),
           }
         ]
 
@@ -90,7 +90,7 @@ class InputThread(threading.Thread):
                     print self.inputQueue
                 else:
                     data += c
-            time.sleep(0.05)
+            time.sleep(0.001)
 
     def stop(self):
         self._stop = True
@@ -115,13 +115,14 @@ class OutputThread(threading.Thread):
             if len(self.outputQueue) > 0:
                 with self.queueLock:
                     msg = self.outputQueue[0]
+                    print self.outputQueue
                     if msg is not None:
                         connection.sendall(str(msg) + '\n')
                         del self.outputQueue[0]
                         log('Sent : ' + str(msg), col=31)
                     else:
                         log('Didn\'t send a message for a set')
-            time.sleep(0.05)
+            time.sleep(0.001)
 
     def stop(self):
         self._stop = True
@@ -149,9 +150,9 @@ while True:
                 if len(inputQueue) > 0:
                     data = inputQueue[0]
                     try:
-                        #msg = get_event(data)
-                        msg = 'reply'
-                        outputQueue.append(msg)
+                        msg = get_event(data)
+                        if msg is not None:
+                            outputQueue.append(msg)
                         del inputQueue[0]
                     except:
                         print traceback.format_exc()
@@ -161,7 +162,7 @@ while True:
                             #try to keep going if an error occurred
                             print 'no debug'
                             break
-            time.sleep(0.05)
+            time.sleep(0.01)
     finally:
         print 'closing connection...'
         inputThread.stop()
