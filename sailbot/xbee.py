@@ -17,24 +17,31 @@ class Xbee(object):
             line = ''
             while not self._stop:
                 with self.lock:
-                    for c in self.xbee:
-                        print 'got', c
-                        if c == '$':
+                    c = self.xbee.read(1)
+                    if c:
+                        print c
+                    if c == '$':
+                        print 'appending'
+                        if len(line) > 0:
                             self.queue.append(line)
                             line = ''
-                        else:
-                            line += c
-            time.sleep(0.01)
+                    else:
+                        line += c
+                time.sleep(0.01)
+
+        def stop(self):
+            self._stop = True
 
     def __init__(self, serialPortName='/dev/ttyAMA0', baudRate=None):
         if baudRate is None:
             baudRate = config.xbeeBaudRate
-        self._xbeeSerial = serial.Serial(config.xbeeSerialport, baudRate)
+        self._xbeeSerial = serial.Serial(config.xbeeSerialport, baudRate, timeout=0.1)
         self.queue = []
         self.threadLock = threading.Lock()
-        self._thread = self.ReadLines(self._xbeeSerial, self.queue,
-                self.threadLock)
-        self._thread.start()
+        self.thread = self.ReadLines(self._xbeeSerial, self.queue, self.threadLock)
+        print 'starting thread'
+        self.thread.start()
+        print 'thread started'
 
     def send(self, message):
         """Send a message to the xbee"""

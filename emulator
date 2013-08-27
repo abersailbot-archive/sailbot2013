@@ -16,7 +16,7 @@ sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server_address = ('localhost', 5555)
 sock.bind(server_address)
 
-DEBUG = False
+DEBUG = 1
 
 events = [
           {
@@ -54,9 +54,10 @@ def get_event(s):
             return events[1][e]()
 
 logLock = threading.Lock()
-def log(message, col=32):
+def log(message, level=0, col=32):
     with logLock:
-        print  '[\033[1;{col}m{}\033[0m]: {}'.format(time.time(), message, col=col)
+        if DEBUG >= level:
+            print  '[\033[1;{col}m{}\033[0m]: {}'.format(time.time(), message, col=col)
 
 def spawn_sailbotlogic():
     return subprocess.Popen(['../SailbotLogic/run'],
@@ -86,7 +87,7 @@ class InputThread(threading.Thread):
                 if c == '\n':
                     with self.queueLock:
                         self.inputQueue.append(data)
-                        #log('received "%s"' % data, col=33)
+                        log('received "%s"' % data, level=2, col=33)
                     data = ''
                 else:
                     data += c
@@ -118,7 +119,7 @@ class OutputThread(threading.Thread):
                     if msg is not None:
                         connection.sendall(str(msg) + '\n')
                         del self.outputQueue[0]
-                        #log('Sent : ' + str(msg), col=31)
+                        log('Sent : ' + str(msg), level=2, col=31)
                     else:
                         log('Didn\'t send a message for a set')
 
@@ -158,7 +159,7 @@ while True:
                         del inputQueue[-1]
                     except:
                         print traceback.format_exc()
-                        if DEBUG:
+                        if DEBUG > 1:
                             sys.exit(1)
                         else:
                             #try to keep going if an error occurred
@@ -166,11 +167,15 @@ while True:
                             break
             with boat.xbee.threadLock:
                 if len(boat.xbee.queue) > 0:
+                    print boat.xbee.queue
+                    log('sending "' + boat.xbee.queue[-1])
                     outputQueue.append(boat.xbee.queue[-1])
+                    del boat.xbee.queue[-1]
             time.sleep(0.01)
     finally:
         print 'closing connection...'
         inputThread.stop()
         outputThread.stop()
+        boat.xbee.thread.stop()
         connection.close()
         sys.exit()
