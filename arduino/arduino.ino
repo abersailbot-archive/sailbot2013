@@ -1,17 +1,19 @@
 #include <Servo.h> 
 #include <Wire.h>
 #include <EEPROM.h>
+#include <OneWire.h>
 
 #define HMC6343_ADDRESS 0x19
 #define HMC6343_HEADING_REG 0x50
 
 Servo myRudderServo; // create servo object to control a servo 
-Servo mySailServo; // a maximum of eight servo objects can be created 
+Servo mySailServo; // a maximum of eight servo objects can be created
+OneWire ds(2);
 
 char inData[6]; // Allocate some space for the string
 int offset = 0;
 
-int DEBUG = 0;
+int DEBUG = 1;
 
 void setup() {
   Serial.begin(9600); //Begin at 9600
@@ -99,6 +101,32 @@ int readWindSensor() {
   return (windAngle);
 }
 
+float readThermometer() {
+  byte i;
+  byte present = 0;
+  byte data[12];
+  byte addr[8];
+  float celsius;
+  ds.reset();
+  ds.select(addr);
+  ds.write(0x44, 1);
+  delay(1000); //magic number. Probably needs to be higher than 750
+  present = ds.reset();
+  ds.select(addr);    
+  ds.write(0xBE);
+  for ( i = 0; i < 9; i++) {
+    data[i] = ds.read();
+  }
+
+  int16_t raw = (data[1] << 8) | data[0];
+  raw = raw << 3;
+  if (data[7] == 0x10) {
+    raw = (raw & 0xFFF0) + 12 - data[6];
+  }
+  celsius = (float)raw / 16.0;
+  return celsius;
+}
+
 int mod(int value){
   int newValue;
   if(value < 0){
@@ -141,6 +169,12 @@ void loop() {
       Serial.print("w");
     }
     Serial.println(readWindSensor()); //Wind Sensor Read
+    break;
+  case 't':
+    if (DEBUG) {
+      Serial.print("t");
+    }
+    Serial.println(readThermometer()); //Read thermometer
     break;
   case 'r':
     if (DEBUG) {
