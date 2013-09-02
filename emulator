@@ -4,10 +4,12 @@ import sys
 import re
 import time
 import traceback
+import subprocess
+import threading
 
 from sailbot import Boat
 
-boat = Boat('waypoints.pnts')
+#boat = Boat()
 logfile = 'log/' + '-'.join(['log-taken-on'] + time.asctime().split()[:-1])
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -16,6 +18,7 @@ sock.bind(server_address)
 
 DEBUG = False
 
+'''debug
 events = [
           {
             #events with arguments
@@ -38,6 +41,7 @@ events = [
             'get waypointnum': boat.get_waypoint_number,
           }
         ]
+'''
 
 def get_event(s):
     for e in events[0]:
@@ -53,41 +57,74 @@ def get_event(s):
 def log(message, col=32):
     print  '[\033[1;{col}m{}\033[0m]: {}'.format(time.time(), message, col=col)
 
+def spawn_sailbotlogic():
+    return subprocess.Popen(['eog'],
+                            stdout=subprocess.PIPE, 
+                            stderr=subprocess.STDOUT)
+
+class InputThread(threading.Thread):
+    def run(self, connection, inputQueue, outputQueue, sockLock, queueLock):
+        data = ''
+        while True:
+            with sockLock:
+                c = connection.recv(1)
+                if c == '\n':
+                    with queueLock:
+                        inputQueue.append(data)
+                        log('received "%s"' % data, col=33)
+                    data = ''
+                else:
+                    data += c
+
+class OutputThread(threading.Thread):
+    def run(self, connection, inputQueue, outputQueue, sockLock, queueLock):
+        while True:
+            if len(outputQueue) > 0:
+                print "heehehehehe2"
+                with queueLock:
+                    if msg is not None:
+                        connection.sendall(str(msg) + '\n')
+                        log('Sent : ' + str(msg), col=31)
+                    else:
+                        log('Didn\'t send a message for a set')
+
 log('starting up on %s port %s' % server_address)
 while True:
     sock.listen(1)
     connection, client_address = sock.accept()
+    inputQueue = []
+    outputQueue = []
+    sockLock = threading.Lock()
+    queueLock = threading.Lock()
     try:
+        inputThread = InputThread()
+        inputThread.run(connection, inputQueue, outputQueue, sockLock, queueLock)
+        outputThread = OutputThread()
+        outputThread.run(connection, inputQueue, outputQueue, sockLock, queueLock)
         while True:
+            '''debug
             if boat.gps.shouldLog:
                 boat.log(logfile)
                 boat.gps.shouldLog = False
+            '''
+            with queueLock:
+                if len(inputQueue) > 0:
+                    data = inputQueue[0]
+                    try:
+                        #msg = get_event(data)
+                        print 'getting', data
+                        msg = 'hello'
+                        outputQueue.append(msg)
+                    except:
+                        print traceback.format_exc()
+                        if DEBUG:
+                            sys.exit(1)
+                        else:
+                            #try to keep going if an error occurred
+                            print 'no debug'
+                            break
 
-            data = ''
-            while True:
-                c = connection.recv(1)
-                if c == '\n' or c == '':
+                else:
                     break
-                else:
-                    data += c
-
-            log('received "%s"' % data, col=33)
-            if data:
-                try:
-                    msg = get_event(data)
-                except:
-                    print traceback.format_exc()
-                    if DEBUG:
-                        sys.exit(1)
-                    else:
-                        #try to keep going if an error occurred
-                        break
-                if msg is not None:
-                    connection.sendall(str(msg) + '\n')
-                    log('Sent : ' + str(msg), col=31)
-                else:
-                    log('Didn\'t send a message for a set')
-            else:
-                break
     finally:
         connection.close()
