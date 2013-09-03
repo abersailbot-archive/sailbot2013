@@ -9,7 +9,7 @@ import threading
 
 from sailbot import Boat
 
-#boat = Boat()
+boat = Boat()
 logfile = 'log/' + '-'.join(['log-taken-on'] + time.asctime().split()[:-1])
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -17,7 +17,7 @@ server_address = ('localhost', 5555)
 sock.bind(server_address)
 
 DEBUG = False
-'''debug
+
 events = [
           {
             #events with arguments
@@ -40,7 +40,6 @@ events = [
             'get waypointnum': boat.get_waypoint_number,
           }
         ]
-'''
 
 def get_event(s):
     for e in events[0]:
@@ -59,7 +58,7 @@ def log(message, col=32):
         print  '[\033[1;{col}m{}\033[0m]: {}'.format(time.time(), message, col=col)
 
 def spawn_sailbotlogic():
-    return subprocess.Popen(['eog'],
+    return subprocess.Popen(['../SailbotLogic/run'],
                             stdout=subprocess.PIPE, 
                             stderr=subprocess.STDOUT)
 
@@ -143,11 +142,9 @@ while True:
 
     try:
         while True:
-            '''debug
             if boat.gps.shouldLog:
                 boat.log(logfile)
                 boat.gps.shouldLog = False
-            '''
             with queueLock:
                 if len(inputQueue) > 0:
                     data = inputQueue[0]
