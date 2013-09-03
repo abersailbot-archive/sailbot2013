@@ -91,6 +91,7 @@ class InputThread(threading.Thread):
                     print self.inputQueue
                 else:
                     data += c
+            time.sleep(0.05)
 
     def stop(self):
         self._stop = True
@@ -121,6 +122,7 @@ class OutputThread(threading.Thread):
                         log('Sent : ' + str(msg), col=31)
                     else:
                         log('Didn\'t send a message for a set')
+            time.sleep(0.05)
 
     def stop(self):
         self._stop = True
@@ -152,7 +154,6 @@ while True:
                     try:
                         #msg = get_event(data)
                         msg = 'reply'
-                        print 'getting', data
                         outputQueue.append(msg)
                         del inputQueue[0]
                     except:
@@ -163,6 +164,7 @@ while True:
                             #try to keep going if an error occurred
                             print 'no debug'
                             break
+            time.sleep(0.05)
     finally:
         print 'closing connection...'
         inputThread.stop()
