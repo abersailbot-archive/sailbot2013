@@ -17,7 +17,6 @@ server_address = ('localhost', 5555)
 sock.bind(server_address)
 
 DEBUG = False
-
 '''debug
 events = [
           {
@@ -54,8 +53,10 @@ def get_event(s):
         if match:
             return events[1][e]()
 
+logLock = threading.Lock()
 def log(message, col=32):
-    print  '[\033[1;{col}m{}\033[0m]: {}'.format(time.time(), message, col=col)
+    with logLock:
+        print  '[\033[1;{col}m{}\033[0m]: {}'.format(time.time(), message, col=col)
 
 def spawn_sailbotlogic():
     return subprocess.Popen(['eog'],
@@ -63,44 +64,82 @@ def spawn_sailbotlogic():
                             stderr=subprocess.STDOUT)
 
 class InputThread(threading.Thread):
-    def run(self, connection, inputQueue, outputQueue, sockLock, queueLock):
+    def __init__(self,
+                 connection,
+                 inputQueue,
+                 outputQueue,
+                 sockLock,
+                 queueLock):
+        threading.Thread.__init__(self)
+        self.connection = connection
+        self.inputQueue = inputQueue
+        self.outputQueue = outputQueue
+        self.sockLock = sockLock
+        self.queueLock = queueLock
+        self._stop = False
+
+    def run(self):
         data = ''
-        while True:
-            with sockLock:
-                c = connection.recv(1)
+        while not self._stop:
+            with self.sockLock:
+                c = self.connection.recv(1)
                 if c == '\n':
-                    with queueLock:
-                        inputQueue.append(data)
+                    with self.queueLock:
+                        self.inputQueue.append(data)
                         log('received "%s"' % data, col=33)
                     data = ''
+                    print self.inputQueue
                 else:
                     data += c
 
+    def stop(self):
+        self._stop = True
+
 class OutputThread(threading.Thread):
-    def run(self, connection, inputQueue, outputQueue, sockLock, queueLock):
-        while True:
-            if len(outputQueue) > 0:
-                print "heehehehehe2"
-                with queueLock:
+    def __init__(self,
+                 connection,
+                 inputQueue,
+                 outputQueue,
+                 sockLock,
+                 queueLock):
+        threading.Thread.__init__(self)
+        self.connection = connection
+        self.inputQueue = inputQueue
+        self.outputQueue = outputQueue
+        self.sockLock = sockLock
+        self.queueLock = queueLock
+        self._stop = False
+
+    def run(self):
+        while not self._stop:
+            if len(self.outputQueue) > 0:
+                with self.queueLock:
+                    msg = self.outputQueue[0]
                     if msg is not None:
                         connection.sendall(str(msg) + '\n')
+                        del self.outputQueue[0]
                         log('Sent : ' + str(msg), col=31)
                     else:
                         log('Didn\'t send a message for a set')
 
+    def stop(self):
+        self._stop = True
+
 log('starting up on %s port %s' % server_address)
 while True:
-    sock.listen(1)
-    connection, client_address = sock.accept()
     inputQueue = []
     outputQueue = []
     sockLock = threading.Lock()
     queueLock = threading.Lock()
+    print "starting thread!"
+    sock.listen(1)
+    connection, client_address = sock.accept()
+    inputThread = InputThread(connection, inputQueue, outputQueue, sockLock, queueLock)
+    inputThread.start()
+    outputThread = OutputThread(connection, inputQueue, outputQueue, sockLock, queueLock)
+    outputThread.start()
+
     try:
-        inputThread = InputThread()
-        inputThread.run(connection, inputQueue, outputQueue, sockLock, queueLock)
-        outputThread = OutputThread()
-        outputThread.run(connection, inputQueue, outputQueue, sockLock, queueLock)
         while True:
             '''debug
             if boat.gps.shouldLog:
@@ -112,9 +151,10 @@ while True:
                     data = inputQueue[0]
                     try:
                         #msg = get_event(data)
+                        msg = 'reply'
                         print 'getting', data
-                        msg = 'hello'
                         outputQueue.append(msg)
+                        del inputQueue[0]
                     except:
                         print traceback.format_exc()
                         if DEBUG:
@@ -123,8 +163,9 @@ while True:
                             #try to keep going if an error occurred
                             print 'no debug'
                             break
-
-                else:
-                    break
     finally:
+        print 'closing connection...'
+        inputThread.stop()
+        outputThread.stop()
         connection.close()
+        sys.exit()
