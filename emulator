@@ -38,6 +38,7 @@ events = [
             'get northing': lambda: 'set northing {}'.format(boat.gps.position.lat),
             'get easting': lambda: 'set easting {}'.format(boat.gps.position.long),
             'get waypointnum': lambda: 'set waypointnum {}'.format(boat.get_waypoint_number()),
+            'get temp': lambda: 'set temp {}'.format(boat.arduino.get_temp()),
           }
         ]
 
