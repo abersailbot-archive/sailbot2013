@@ -13,7 +13,7 @@ OneWire ds(2);
 char inData[6]; // Allocate some space for the string
 int offset = 0;
 
-int DEBUG = 1;
+int DEBUG = 0;
 
 void setup() {
   Serial.begin(9600); //Begin at 9600
@@ -102,24 +102,31 @@ int readWindSensor() {
 }
 
 float readThermometer() {
-  byte i;
+    byte i;
   byte present = 0;
   byte data[12];
   byte addr[8];
   float celsius;
+  
+  if ( !ds.search(addr)) {
+    ds.reset_search();
+    delay(250);
+  }
   ds.reset();
   ds.select(addr);
-  ds.write(0x44, 1);
-  delay(1000); //magic number. Probably needs to be higher than 750
+  ds.write(0x44, 1);        // start conversion, with parasite power on at the end
+  
+  delay(750);     // maybe 750ms is enough, maybe not
+  
   present = ds.reset();
   ds.select(addr);    
   ds.write(0xBE);
-  for ( i = 0; i < 9; i++) {
+  for ( i = 0; i < 9; i++) {           // we need 9 bytes
     data[i] = ds.read();
   }
-
+  
   int16_t raw = (data[1] << 8) | data[0];
-  raw = raw << 3;
+  raw = raw << 3; // 9 bit resolution default
   if (data[7] == 0x10) {
     raw = (raw & 0xFFF0) + 12 - data[6];
   }
@@ -174,7 +181,7 @@ void loop() {
     if (DEBUG) {
       Serial.print("t");
     }
-    Serial.println(readThermometer()); //Read thermometer
+    Serial.println(readThermometer()); //Read Thermometer
     break;
   case 'r':
     if (DEBUG) {
