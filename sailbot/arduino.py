@@ -37,6 +37,10 @@ class Arduino(object):
         """Get the heading from the compass"""
         return int(self.__sendCommand('c'))
 
+    def get_thermometer(self):
+        """Get the temperature in degrees Celsius"""
+        return float(self.__sendCommand('t'))
+
     def set_rudder(self, angle):
         """Set the rudder servo to a value between 1060 and 1920"""
         self.rudderAngle = angle

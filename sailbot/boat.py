@@ -50,7 +50,8 @@ class Boat(object):
  distance={waypointDistance}\
  speed={speed}\
  thead={targetHeading}\
- tdist={targetDistance}\n\r'.format(
+ tdist={targetDistance}\
+ temp={temp}\n\r'.format(
                     time = int(time.time()),
                     head = self.arduino.get_compass(),
                     wind = self.get_wind_average(),
@@ -64,7 +65,8 @@ class Boat(object):
                     waypointDistance = self._waypointDist,
                     speed = self.gps.speed,
                     targetHeading = self._targetHeading,
-                    targetDistance = self._targetDistance
+                    targetDistance = self._targetDistance,
+                    temp = self.arduino.get_compass(),
                 )
 
             # write to log file
