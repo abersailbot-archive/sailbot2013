@@ -11,14 +11,14 @@ import traceback
 
 
 def log(message):
-        print '[\033[1;32m{}\033[0m]: {}'.format(time.time(), message)
+    print '[\033[1;32m{}\033[0m]: {}'.format(time.time(), message)
 
 class Boat(object):
     def __init__(self, waypointFile=None):
         """Constructor for the boat object"""
         self.arduino = Arduino()
         self.gps = Gps()
-        self._xbee = Xbee()
+        self.xbee = Xbee()
         self._waypointN = 0
         self._waypointE = 0
         self._waypointNumber = 0
@@ -74,7 +74,7 @@ class Boat(object):
                 f.write(l)
 
             # write to xbee
-            self._xbee.send(l)
+            self.xbee.send(l)
             
            # write to console
             log(l)

@@ -121,6 +121,7 @@ class OutputThread(threading.Thread):
                         #log('Sent : ' + str(msg), col=31)
                     else:
                         log('Didn\'t send a message for a set')
+
             time.sleep(0.001)
 
     def stop(self):
@@ -145,14 +146,16 @@ while True:
             if boat.gps.shouldLog:
                 boat.gps.shouldLog = False
                 boat.log(logfile)
+
+            #handle the IO queues between java and python
             with queueLock:
                 if len(inputQueue) > 0:
-                    data = inputQueue[0]
+                    data = inputQueue[-1]
                     try:
                         msg = get_event(data)
                         if msg is not None:
                             outputQueue.append(msg)
-                        del inputQueue[0]
+                        del inputQueue[-1]
                     except:
                         print traceback.format_exc()
                         if DEBUG:
@@ -161,6 +164,9 @@ while True:
                             #try to keep going if an error occurred
                             print 'no debug'
                             break
+            with boat.xbee.threadLock:
+                if len(boat.xbee.queue) > 0:
+                    outputQueue.append(boat.xbee.queue[-1])
             time.sleep(0.01)
     finally:
         print 'closing connection...'
