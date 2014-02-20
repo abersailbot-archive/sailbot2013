@@ -1,14 +1,13 @@
+#include <CMPS10.h>
 #include <Servo.h> 
 #include <Wire.h>
 #include <EEPROM.h>
 #include <OneWire.h>
 
-#define HMC6343_ADDRESS 0x19
-#define HMC6343_HEADING_REG 0x50
-
 Servo myRudderServo; // create servo object to control a servo 
 Servo mySailServo; // a maximum of eight servo objects can be created
 OneWire ds(2);
+CMPS10 cmps10;
 
 char inData[6]; // Allocate some space for the string
 int offset = 0;
@@ -38,10 +37,10 @@ void setup() {
 }
 
 void getData() {
-  char inChar=-1; // Where to store the character read
-  byte index = 0; // Index into array; where to store the character
-  for(index = 0; index<5; index++) {
-    while (Serial.available() == 0);
+  char inChar; // Where to store the character read
+  int index; // Index into array; where to store the character
+  for(index = 0; index < 5; index++) {
+    while (Serial.available() == 0); //Null statment to wait until there is a character waiting on the Serial line
     inChar = Serial.read(); // Read a character
     if(inChar != '\n') {
       inData[index] = inChar; // Store it
@@ -71,22 +70,8 @@ int getAmount() {
   return turnAmount;
 }
 
-int readCompass() {
-  byte highByte, lowByte;
-
-  Wire.beginTransmission(HMC6343_ADDRESS); // Start communicating with the HMC6343 compasss
-  Wire.write(HMC6343_HEADING_REG); // Send the address of the register that we want to read
-  Wire.endTransmission();
-
-  Wire.requestFrom(HMC6343_ADDRESS, 6); // Request six bytes of data from the HMC6343 compasss
-  while(Wire.available() < 1); // Busy wait while there is no byte to receive
-
-  highByte = Wire.read(); // Reads in the bytes and convert them into proper degree units.
-  lowByte = Wire.read();
-  float heading = ((highByte << 8) + lowByte) / 10.0; // the heading in degrees
-  heading = heading - 90;
-  heading = mod(heading);
-  return (int)heading; // Print the sensor readings to the serial port.
+float readCompass() {
+  return cmps10.bearing();; // Print the sensor readings to the serial port.
 }
 
 int readWindSensor() {
@@ -101,8 +86,8 @@ int readWindSensor() {
   return (windAngle);
 }
 
-float readThermometer() {
-    byte i;
+float readThermometer() { // This makes me cry
+  byte i;
   byte present = 0;
   byte data[12];
   byte addr[8];
@@ -134,7 +119,7 @@ float readThermometer() {
   return celsius;
 }
 
-int mod(int value){
+int mod(int value){ //Wraps an Int value around 0 to 360
   int newValue;
   if(value < 0){
     newValue = value + 360;
@@ -148,7 +133,7 @@ int mod(int value){
   return newValue;
 }
 
-float mod(float value){
+float mod(float value){ //Wraps a Float value around 0 to 360
   float newValue;
   if(value < 0){
     newValue = value + 360;
@@ -211,5 +196,6 @@ void loop() {
     EEPROM.write(0, lowByte);
     EEPROM.write(1, highByte);
     Serial.println(1);
+    break;
   }
 }
