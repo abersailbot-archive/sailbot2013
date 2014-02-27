@@ -71,7 +71,7 @@ int getAmount() {
 }
 
 float readCompass() {
-  return cmps10.bearing();; // Print the sensor readings to the serial port.
+  return cmps10.bearing(); // Print the sensor readings to the serial port.
 }
 
 int readWindSensor() {
