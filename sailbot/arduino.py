@@ -35,7 +35,7 @@ class Arduino(object):
 
     def get_compass(self):
         """Get the heading from the compass"""
-        return float(self.__sendCommand('c'))
+        return int(float(self.__sendCommand('c')))
 
     def get_thermometer(self):
         """Get the temperature in degrees Celsius"""
